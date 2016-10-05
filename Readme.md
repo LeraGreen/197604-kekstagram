@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм» [![Build status][travis-image]][travis-url] [![Dependency status][dependency-image]][dependency-url]
 
 * Студент: [Валерия Зелёная](https://up.htmlacademy.ru/javascript/7/user/197604).
-* Наставник: `Неизвестно`.
+* Наставник: 'Борис Ванюшин'.
 
 ---
 
