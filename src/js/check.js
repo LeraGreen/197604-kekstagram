@@ -1,0 +1,17 @@
+function getMessage(a, b) {
+
+  if (typeof a == "boolean" && a == true) {
+    return ("Переданное GIF-изображение анимировано и содержит " + [b] + " кадров");
+  } else if (typeof a == "boolean" && a == false) {
+    return ("Переданное GIF-изображение не анимировано");
+  } else if (typeof a == "number") {
+    return ("Переданное SVG-изображение содержит " + [a] + " объектов и " + [b * 4] + " атрибутов");
+  } else if (typeof a == "object") {
+    return ("Количество красных точек во всех строчках изображения: " + [amountOfRedPoints]);
+  } else if (typeof a == "object" && typeof b == "object") {
+    return ("Общая площадь артефактов сжатия: " + [artifactsSquare] +  " пикселей");
+  } else {
+    return ("Переданы некорректные данные"); 
+  }
+
+}
