@@ -54,4 +54,5 @@ function getMessage(a, b) {
 
 
 
+getMessage();
 
