@@ -1,3 +1,5 @@
+'use strict';
+
 function getMessage(a, b) {
 
   var amountOfRedPoints = 0;
@@ -5,52 +7,50 @@ function getMessage(a, b) {
 
   if (a === true) {
 
-    return ("Переданное GIF-изображение анимировано и содержит " + [b] + " кадров");
+    return ('Переданное GIF-изображение анимировано и содержит ' + [b] + ' кадров');
+  }
 
-  } 
 
   if (a === false) {
 
-    return ("Переданное GIF-изображение не анимировано");
+    return ('Переданное GIF-изображение не анимировано');
+  }
 
-  } 
 
-  if (typeof a === "number") {
+  if (typeof a === 'number') {
 
-    return ("Переданное SVG-изображение содержит " + [a] + " объектов и " + [b * 4] + " атрибутов");
+    return ('Переданное SVG-изображение содержит ' + [a] + ' объектов и ' + [b * 4] + ' атрибутов');
+  }
 
-  } 
 
   if (a instanceof Array && !(b instanceof Array)) {
 
     for ( var i = 0; i < a.length; i++ ) {
 
-    amountOfRedPoints += a[i];
+      amountOfRedPoints += a[i];
 
     }
 
-    return ("Количество красных точек во всех строчках изображения: " + [amountOfRedPoints]);
-  } 
+    return ('Количество красных точек во всех строчках изображения: ' + [amountOfRedPoints]);
+  }
+
 
   if (a instanceof Array && b instanceof Array) {
 
-    var minLength = (a.length < b.length)? a.length : b.length; 
+    var minLength = Math.max(a.length, b.length);
 
-    for ( var i = 0; i < minLength; i++ ) {
+    for ( var j = 0; j < minLength; j++ ) {
 
-    artifactsSquare += a[i] * b[i];
+      artifactsSquare += a[j] * b[j];
 
     }
 
-    return ("Общая площадь артефактов сжатия: " + [artifactsSquare] +  " пикселей");
-    
-  } 
+    return ('Общая площадь артефактов сжатия: ' + [artifactsSquare] + ' пикселей');
+  }
 
 
-  return ("Переданы некорректные данные"); 
-
+  return ('Переданы некорректные данные');
 }
-
 
 
 

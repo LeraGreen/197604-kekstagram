@@ -111,30 +111,6 @@
       // Координаты задаются от центра холста.
       this._ctx.drawImage(this._image, displX, displY);
 
-      this._ctx.beginPath();
-      this._ctx.moveTo(displX, displY);
-      this._ctx.lineTo(this._container.width, displY);
-      this._ctx.lineTo(this._container.width, this._container.height);
-      this._ctx.lineTo(displX, this._container.height);
-      this._ctx.lineTo(displX, displY);
-      this._ctx.moveTo(
-        (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
-        (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2);
-      this._ctx.lineTo(
-        this._resizeConstraint.side - this._ctx.lineWidth / 2,
-        (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2);
-     this._ctx.lineTo(
-        this._resizeConstraint.side - this._ctx.lineWidth / 2,
-        this._resizeConstraint.side - this._ctx.lineWidth / 2);
-      this._ctx.lineTo(
-        (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
-        this._resizeConstraint.side - this._ctx.lineWidth / 2);
-     this._ctx.lineTo(
-        (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
-        (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2);
-      this._ctx.closePath();
-      this._ctx.globalAlpha = 0.8;
-      this._ctx.fill('evenodd');
 
       // Отрисовка прямоугольника, обозначающего область изображения после
       // кадрирования. Координаты задаются от центра.
@@ -143,6 +119,70 @@
           (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
           this._resizeConstraint.side - this._ctx.lineWidth / 2,
           this._resizeConstraint.side - this._ctx.lineWidth / 2);
+
+      var size = Math.round(this._resizeConstraint.side - this._ctx.lineWidth / 2);
+
+
+
+      this._ctx.translate(-this._container.width / 2, -this._container.height / 2);
+
+      var innerFrame = {};
+      innerFrame.side = Math.round(size + this._ctx.lineWidth);
+
+      var offsetX = Math.round( this._ctx.lineWidth / 2 ) + 1;
+      var offsetY = Math.round( this._ctx.lineWidth / 2 ) + 1;
+
+
+      var block1 = {};
+      block1.x = 0;
+      block1.y = 0;
+      block1.width = this._container.width;
+      block1.height = Math.round((this._container.height - innerFrame.side) / 2) - offsetY;
+
+
+      var block2 = {};
+      block2.x = block1.x;
+      block2.y = block1.y + block1.height;
+      block2.width = Math.round((this._container.width - innerFrame.side) / 2) - offsetX;
+      block2.height = innerFrame.side;
+
+
+      var block3 = {};
+      block3.x = block1.x;
+      block3.y = block2.y + block2.height;
+      block3.width = block1.width;
+      block3.height = this._container.height - block1.height - block2.height;
+
+
+      var block4 = {};
+      block4.x = block1.x + block2.width + innerFrame.side;
+      block4.y = block2.y;
+      block4.width = this._container.width - block4.x;
+      block4.height = block2.height;
+
+
+      this._ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+
+
+      var self = this;
+      function draw(block) {
+        self._ctx.fillRect(block.x, block.y, block.width, block.height);
+      }
+
+
+      draw(block1);
+      draw(block2);
+      draw(block3);
+      draw(block4);
+
+
+      this._ctx.fillStyle = '#FFF';
+      this._ctx.textAlign = 'center';
+      this._ctx.font = '30px Tahoma';
+      this._ctx.textBaseline = 'bottom';
+      this._ctx.fillText(this._image.naturalWidth + ' x ' + this._image.naturalHeight,
+        this._container.width / 2, block1.height);
+
 
       // Восстановление состояния канваса, которое было до вызова ctx.save
       // и последующего изменения системы координат. Нужно для того, чтобы
