@@ -172,11 +172,9 @@
       function drawOutFrame(arr) {
 
         for ( var i = 0; i < arr.length; i++ ) {
-
           self._ctx.fillRect( blocks[i].x, blocks[i].y, blocks[i].width, blocks[i].height );
         }
       }
-
 
       // Восстановление состояния канваса, которое было до вызова ctx.save
       // и последующего изменения системы координат. Нужно для того, чтобы
