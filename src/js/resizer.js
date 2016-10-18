@@ -122,8 +122,6 @@
 
       var size = Math.round(this._resizeConstraint.side - this._ctx.lineWidth / 2);
 
-
-
       this._ctx.translate(-this._container.width / 2, -this._container.height / 2);
 
       var innerFrame = {};
@@ -132,6 +130,7 @@
       var offsetX = Math.round( this._ctx.lineWidth / 2 ) + 1;
       var offsetY = Math.round( this._ctx.lineWidth / 2 ) + 1;
 
+      var self = this;
 
       var blocks = [];
 
@@ -141,13 +140,11 @@
       blocks[0].width = this._container.width;
       blocks[0].height = Math.round((this._container.height - innerFrame.side) / 2) - offsetY;
 
-
       blocks[1] = {};
       blocks[1].x = blocks[0].x;
       blocks[1].y = blocks[0].y + blocks[0].height;
       blocks[1].width = Math.round((this._container.width - innerFrame.side) / 2) - offsetX;
       blocks[1].height = innerFrame.side;
-
 
       blocks[2] = {};
       blocks[2].x = blocks[0].x;
@@ -155,31 +152,15 @@
       blocks[2].width = blocks[0].width;
       blocks[2].height = this._container.height - blocks[0].height - blocks[1].height;
 
-
       blocks[3] = {};
       blocks[3].x = blocks[0].x + blocks[1].width + innerFrame.side;
       blocks[3].y = blocks[1].y;
       blocks[3].width = this._container.width - blocks[3].x;
       blocks[3].height = blocks[1].height;
 
-
-
       this._ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
 
-
-      var self = this;
-
-      function draw(arr) {
-
-        for ( var i = 0; i < arr.length; i++ ) {
-
-          self._ctx.fillRect( blocks[i].x, blocks[i].y, blocks[i].width, blocks[i].height );
-        }
-      }
-
-
-      draw(blocks);
-
+      drawOutFrame(blocks);
 
       this._ctx.fillStyle = '#FFF';
       this._ctx.textAlign = 'center';
@@ -187,6 +168,14 @@
       this._ctx.textBaseline = 'bottom';
       this._ctx.fillText(this._image.naturalWidth + ' x ' + this._image.naturalHeight,
         this._container.width / 2, blocks[0].height);
+
+      function drawOutFrame(arr) {
+
+        for ( var i = 0; i < arr.length; i++ ) {
+
+          self._ctx.fillRect( blocks[i].x, blocks[i].y, blocks[i].width, blocks[i].height );
+        }
+      }
 
 
       // Восстановление состояния канваса, которое было до вызова ctx.save
