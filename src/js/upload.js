@@ -41,6 +41,7 @@
    */
   var currentResizer;
 
+
   /**
    * Удаляет текущий объект {@link Resizer}, чтобы создать новый с другим
    * изображением.
@@ -71,9 +72,44 @@
    * Проверяет, валидны ли данные, в форме кадрирования.
    * @return {boolean}
    */
-  var resizeFormIsValid = function() {
-    return true;
+
+  var resizeControlX = document.querySelector('#resize-x');
+  var resizeControlY = document.querySelector('#resize-y');
+  var resizeControlSide = document.querySelector('#resize-size');
+
+  resizeControlY.min = 0;
+  resizeControlX.min = 0;
+
+  resizeControlX.value = 0;
+  resizeControlY.value = 0;
+  resizeControlSide.value = 0;
+
+  resizeControlX.onchange = function() {
+    resizeFormIsValid(resizeControlX.value, resizeControlY.value, resizeControlSide.value);
   };
+
+  resizeControlY.onchange = function() {
+    resizeFormIsValid(resizeControlX.value, resizeControlY.value, resizeControlSide.value);
+  };
+
+  resizeControlSide.onchange = function() {
+    resizeFormIsValid(resizeControlX.value, resizeControlY.value, resizeControlSide.value);
+  };
+
+  var resizeFormIsValid = function(x, y, side) {
+
+    var imageWidth = currentResizer._image.naturalWidth;
+    var imageHeight = currentResizer._image.naturalHeight;
+    var sum1 = +x + +side;
+    var sum2 = +y + +side;
+
+    if (sum1 <= imageWidth && sum2 <= imageHeight && y >= 0 && x >= 0) {
+      return true;
+    }
+      document.querySelector('#resize-fwd').setAttribute('disabled', 'disabled');
+      return false;
+  };
+
 
   /**
    * Форма загрузки изображения.
@@ -86,6 +122,7 @@
    * @type {HTMLFormElement}
    */
   var resizeForm = document.forms['upload-resize'];
+
 
   /**
    * Форма добавления фильтра.
