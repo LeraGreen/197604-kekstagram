@@ -84,6 +84,8 @@
   resizeControlY.value = 0;
   resizeControlSide.value = 0;
 
+  var btnFormSubmit = document.querySelector('#resize-fwd');
+
   resizeControlX.onchange = function() {
     resizeFormIsValid(resizeControlX.value, resizeControlY.value, resizeControlSide.value);
   };
@@ -104,10 +106,11 @@
     var sum2 = +y + +side;
 
     if (sum1 <= imageWidth && sum2 <= imageHeight && y >= 0 && x >= 0) {
+      btnFormSubmit.removeAttribute('disabled');
       return true;
     }
-      document.querySelector('#resize-fwd').setAttribute('disabled', 'disabled');
-      return false;
+    btnFormSubmit.setAttribute('disabled', 'disabled');
+    return false;
   };
 
 
