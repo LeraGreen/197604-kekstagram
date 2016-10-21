@@ -77,42 +77,47 @@
   var resizeControlY = document.querySelector('#resize-y');
   var resizeControlSide = document.querySelector('#resize-size');
 
+  var controls = [resizeControlX, resizeControlY, resizeControlSide];
+
+  var setValue = function(arr) {
+    for (var i = 0; i < arr.length; i++) {
+      arr[i].value = 0;
+    }
+  };
+
+  setValue(controls);
+
   resizeControlY.min = 0;
   resizeControlX.min = 0;
 
-  resizeControlX.value = 0;
-  resizeControlY.value = 0;
-  resizeControlSide.value = 0;
-
-  var btnFormSubmit = document.querySelector('#resize-fwd');
-
   resizeControlX.onchange = function() {
-    resizeFormIsValid(resizeControlX.value, resizeControlY.value, resizeControlSide.value);
+    setDisabled(resizeControlX.value, resizeControlY.value, resizeControlSide.value);
   };
 
   resizeControlY.onchange = function() {
-    resizeFormIsValid(resizeControlX.value, resizeControlY.value, resizeControlSide.value);
+    setDisabled(resizeControlX.value, resizeControlY.value, resizeControlSide.value);
   };
 
   resizeControlSide.onchange = function() {
-    resizeFormIsValid(resizeControlX.value, resizeControlY.value, resizeControlSide.value);
+    setDisabled(resizeControlX.value, resizeControlY.value, resizeControlSide.value);
   };
 
   var resizeFormIsValid = function(x, y, side) {
-
-    var imageWidth = currentResizer._image.naturalWidth;
-    var imageHeight = currentResizer._image.naturalHeight;
     var sum1 = +x + +side;
     var sum2 = +y + +side;
-
-    if (sum1 <= imageWidth && sum2 <= imageHeight && y >= 0 && x >= 0) {
-      btnFormSubmit.removeAttribute('disabled');
+    if (sum1 <= currentResizer._image.naturalWidth && sum2 <= currentResizer._image.naturalHeight && y >= 0 && x >= 0) {
       return true;
     }
-    btnFormSubmit.setAttribute('disabled', 'disabled');
     return false;
   };
 
+  var setDisabled = function() {
+    if (resizeFormIsValid(resizeControlX.value, resizeControlY.value, resizeControlSide.value)) {
+      document.querySelector('#resize-fwd').removeAttribute('disabled');
+    } else {
+      document.querySelector('#resize-fwd').setAttribute('disabled', 'disabled');
+    }
+  };
 
   /**
    * Форма загрузки изображения.
