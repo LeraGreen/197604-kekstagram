@@ -73,50 +73,37 @@
    * @return {boolean}
    */
 
-  var resizeControlX = document.querySelector('#resize-x');
-  var resizeControlY = document.querySelector('#resize-y');
-  var resizeControlSide = document.querySelector('#resize-size');
+  var resizeControls = document.getElementsByClassName('upload-resize-control');
 
-  var controls = [resizeControlX, resizeControlY, resizeControlSide];
+  for (var i = 0; i < resizeControls.length; i++) {
+    var element = resizeControls[i];
+    element.value = 0;
+    if (element.id === 'resize-x' || element.id === 'resize-y') {
+      element.min = 0;
+    }
+    element.oninput = function() {
+      validate();
+    };
+  }
 
-  var setValue = function(arr) {
-    for (var i = 0; i < arr.length; i++) {
-      arr[i].value = 0;
+  var validate = function() {
+    if (resizeFormIsValid()) {
+      document.getElementById('resize-fwd').removeAttribute('disabled');
+    } else {
+      document.getElementById('resize-fwd').setAttribute('disabled', 'disabled');
     }
   };
 
-  setValue(controls);
-
-  resizeControlY.min = 0;
-  resizeControlX.min = 0;
-
-  resizeControlX.onchange = function() {
-    setDisabled(resizeControlX.value, resizeControlY.value, resizeControlSide.value);
-  };
-
-  resizeControlY.onchange = function() {
-    setDisabled(resizeControlX.value, resizeControlY.value, resizeControlSide.value);
-  };
-
-  resizeControlSide.onchange = function() {
-    setDisabled(resizeControlX.value, resizeControlY.value, resizeControlSide.value);
-  };
-
-  var resizeFormIsValid = function(x, y, side) {
-    var sum1 = +x + +side;
-    var sum2 = +y + +side;
-    if (sum1 <= currentResizer._image.naturalWidth && sum2 <= currentResizer._image.naturalHeight && y >= 0 && x >= 0) {
+  var resizeFormIsValid = function() {
+    var x = +document.getElementById('resize-x').value;
+    var y = +document.getElementById('resize-y').value;
+    var side = +document.getElementById('resize-size').value;
+    var sumXSide = x + side;
+    var sumYSide = y + side;
+    if (sumXSide <= currentResizer._image.naturalWidth && sumYSide <= currentResizer._image.naturalHeight && y >= 0 && x >= 0) {
       return true;
     }
     return false;
-  };
-
-  var setDisabled = function() {
-    if (resizeFormIsValid(resizeControlX.value, resizeControlY.value, resizeControlSide.value)) {
-      document.querySelector('#resize-fwd').removeAttribute('disabled');
-    } else {
-      document.querySelector('#resize-fwd').setAttribute('disabled', 'disabled');
-    }
   };
 
   /**
