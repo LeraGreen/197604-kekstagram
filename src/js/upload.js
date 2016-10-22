@@ -76,34 +76,30 @@
   var resizeControls = document.getElementsByClassName('upload-resize-control');
 
   for (var i = 0; i < resizeControls.length; i++) {
-    var element = resizeControls[i];
-    element.value = 0;
-    if (element.id === 'resize-x' || element.id === 'resize-y') {
-      element.min = 0;
+    var inputElement = resizeControls[i];
+    inputElement.value = 0;
+    if (inputElement.id === 'resize-x' || inputElement.id === 'resize-y') {
+      inputElement.min = 0;
     }
-    element.oninput = function() {
-      validate();
-    };
+    inputElement.oninput = validate;
   }
 
-  var validate = function() {
+  function validate() {
     if (resizeFormIsValid()) {
       document.getElementById('resize-fwd').removeAttribute('disabled');
     } else {
       document.getElementById('resize-fwd').setAttribute('disabled', 'disabled');
     }
-  };
+  }
 
   var resizeFormIsValid = function() {
-    var x = +document.getElementById('resize-x').value;
-    var y = +document.getElementById('resize-y').value;
+    var horizontalOffset = +document.getElementById('resize-x').value;
+    var verticalOffset = +document.getElementById('resize-y').value;
     var side = +document.getElementById('resize-size').value;
-    var sumXSide = x + side;
-    var sumYSide = y + side;
-    if (sumXSide <= currentResizer._image.naturalWidth && sumYSide <= currentResizer._image.naturalHeight && y >= 0 && x >= 0) {
-      return true;
-    }
-    return false;
+    var sumXSide = horizontalOffset + side;
+    var sumYSide = verticalOffset + side;
+    return sumXSide <= currentResizer._image.naturalWidth &&
+      sumYSide <= currentResizer._image.naturalHeight;
   };
 
   /**
