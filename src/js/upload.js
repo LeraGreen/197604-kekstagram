@@ -41,6 +41,7 @@
    */
   var currentResizer;
 
+
   /**
    * Удаляет текущий объект {@link Resizer}, чтобы создать новый с другим
    * изображением.
@@ -71,8 +72,34 @@
    * Проверяет, валидны ли данные, в форме кадрирования.
    * @return {boolean}
    */
+
+  var resizeControls = document.getElementsByClassName('upload-resize-control');
+
+  for (var i = 0; i < resizeControls.length; i++) {
+    var inputElement = resizeControls[i];
+    inputElement.value = 0;
+    if (inputElement.id === 'resize-x' || inputElement.id === 'resize-y') {
+      inputElement.min = 0;
+    }
+    inputElement.oninput = validate;
+  }
+
+  function validate() {
+    if (resizeFormIsValid()) {
+      document.getElementById('resize-fwd').removeAttribute('disabled');
+    } else {
+      document.getElementById('resize-fwd').setAttribute('disabled', 'disabled');
+    }
+  }
+
   var resizeFormIsValid = function() {
-    return true;
+    var horizontalOffset = +document.getElementById('resize-x').value;
+    var verticalOffset = +document.getElementById('resize-y').value;
+    var side = +document.getElementById('resize-size').value;
+    var sumXSide = horizontalOffset + side;
+    var sumYSide = verticalOffset + side;
+    return sumXSide <= currentResizer._image.naturalWidth &&
+      sumYSide <= currentResizer._image.naturalHeight;
   };
 
   /**
@@ -86,6 +113,7 @@
    * @type {HTMLFormElement}
    */
   var resizeForm = document.forms['upload-resize'];
+
 
   /**
    * Форма добавления фильтра.
