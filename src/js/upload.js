@@ -225,7 +225,7 @@
       var image = currentResizer.exportImage().src;
 
       var thumbnails = filterForm.querySelectorAll('.upload-filter-preview');
-      for (var i = 0; i < thumbnails.length; i++) {
+      for (i = 0; i < thumbnails.length; i++) {
         thumbnails[i].style.backgroundImage = 'url(' + image + ')';
       }
 
@@ -233,6 +233,7 @@
 
       resizeForm.classList.add('invisible');
       filterForm.classList.remove('invisible');
+      setCurrentFilterName();
     }
   };
 
@@ -247,17 +248,57 @@
     resizeForm.classList.remove('invisible');
   };
 
+  function setFilterName(filter) {
+
+    var date = new Date();
+    date.setHours(0, 0, 0, 0);
+    date.setMonth(11, 9);
+    var now = new Date();
+    now.setHours(0, 0, 0, 0);
+    console.log(date, now);
+
+    var expireCookieDay = 0;
+
+    if (date > now) {
+      date.setFullYear(date.getFullYear() - 1);
+      console.log(date);
+    }
+    expireCookieDay = ((now - date) / (24 * 60 * 60 * 1000));
+    console.log(expireCookieDay);
+
+    Cookies.set('upload-filter', filter, { expires: expireCookieDay });
+  }
+
+  function getFilterName() {
+    return Cookies.get('upload-filter');
+  }
+
+  function setCurrentFilterName() {
+    var filterName = getFilterName();
+
+    if (filterName === null) {
+      return;
+    }
+
+    for (i = 0; i < filterForm['upload-filter'].length; i++) {
+      if (filterForm['upload-filter'][i].id === 'upload-' + filterName) {
+        filterForm['upload-filter'][i].setAttribute('checked', 'checked');
+      }
+    }
+    filterForm.onchange();
+  }
+
   /**
    * Отправка формы фильтра. Возвращает в начальное состояние, предварительно
    * записав сохраненный фильтр в cookie.
    * @param {Event} evt
    */
+
   filterForm.onsubmit = function(evt) {
     evt.preventDefault();
 
     cleanupResizer();
     updateBackground();
-
     filterForm.classList.add('invisible');
     uploadForm.classList.remove('invisible');
   };
@@ -287,6 +328,7 @@
     // убрать предыдущий примененный класс. Для этого нужно или запоминать его
     // состояние или просто перезаписывать.
     filterImage.className = 'filter-image-preview ' + filterMap[selectedFilter];
+    setFilterName(filterMap[selectedFilter]);
   };
 
   cleanupResizer();
