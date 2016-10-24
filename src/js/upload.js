@@ -233,7 +233,7 @@
 
       resizeForm.classList.add('invisible');
       filterForm.classList.remove('invisible');
-      setCurrentFilterName();
+      createFiltertArr();
     }
   };
 
@@ -250,39 +250,46 @@
 
   function setFilterName(filter) {
 
-    var date = new Date();
-    date.setHours(0, 0, 0, 0);
-    date.setMonth(11, 9);
+    var graceBirthday = new Date();
+    graceBirthday.setMonth(11, 9);
     var now = new Date();
-    now.setHours(0, 0, 0, 0);
-    console.log(date, now);
+    var DAYS = 24 * 60 * 60 * 1000;
 
     var expireCookieDay = 0;
-
-    if (date > now) {
-      date.setFullYear(date.getFullYear() - 1);
-      console.log(date);
-    }
-    expireCookieDay = ((now - date) / (24 * 60 * 60 * 1000));
-    console.log(expireCookieDay);
-
+    expireCookieDay = Math.floor((now - getGraceBithday(graceBirthday, now)) / DAYS);
     Cookies.set('upload-filter', filter, { expires: expireCookieDay });
+  }
+
+  function getGraceBithday(dayBirthday, dayNow) {
+    if (dayBirthday > dayNow) {
+      return dayBirthday.setFullYear(dayBirthday.getFullYear() - 1);
+    }
+
+    return dayBirthday;
   }
 
   function getFilterName() {
     return Cookies.get('upload-filter');
   }
 
-  function setCurrentFilterName() {
-    var filterName = getFilterName();
+  function createFiltertArr() {
+    var filterList = filterForm['upload-filter'];
+    var filterListLength = filterList.length;
+    var filterArr = [];
+    for (i = 0; i < filterListLength; i++) {
+      filterArr[i] = filterList[i];
+    }
+    setCurrentFilterName(filterArr);
+  }
 
-    if (filterName === null) {
+  function setCurrentFilterName(arr) {
+    if (getFilterName() === null) {
       return;
     }
 
-    for (i = 0; i < filterForm['upload-filter'].length; i++) {
-      if (filterForm['upload-filter'][i].id === 'upload-' + filterName) {
-        filterForm['upload-filter'][i].setAttribute('checked', 'checked');
+    for (i = 0; i < arr.length; i++) {
+      if (arr[i].id === 'upload-' + getFilterName()) {
+        arr[i].setAttribute('checked', 'checked');
       }
     }
     filterForm.onchange();
