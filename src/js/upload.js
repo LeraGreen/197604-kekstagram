@@ -233,7 +233,7 @@
 
       resizeForm.classList.add('invisible');
       filterForm.classList.remove('invisible');
-      createFiltertArr();
+      setCurrentFilterName();
     }
   };
 
@@ -248,51 +248,43 @@
     resizeForm.classList.remove('invisible');
   };
 
-  function setFilterName(filter) {
+  var DAYS = 24 * 60 * 60 * 1000;
 
+  function getLastGraceBithday() {
     var graceBirthday = new Date();
     graceBirthday.setMonth(11, 9);
     var now = new Date();
-    var DAYS = 24 * 60 * 60 * 1000;
 
-    var expireCookieDay = 0;
-    expireCookieDay = Math.floor((now - getGraceBithday(graceBirthday, now)) / DAYS);
-    Cookies.set('upload-filter', filter, { expires: expireCookieDay });
-  }
-
-  function getGraceBithday(dayBirthday, dayNow) {
-    if (dayBirthday > dayNow) {
-      return dayBirthday.setFullYear(dayBirthday.getFullYear() - 1);
+    if (graceBirthday > now) {
+      return graceBirthday.setFullYear(graceBirthday.getFullYear() - 1);
     }
-
-    return dayBirthday;
+    return graceBirthday;
   }
 
-  function getFilterName() {
+  function getExpireCookiesDate() {
+    return Math.floor((new Date() - getLastGraceBithday()) / DAYS);
+  }
+
+  function setCookie(filter) {
+    Cookies.set('upload-filter', filter, { expires: getExpireCookiesDate() });
+  }
+
+  function getFilterNameFromCookies() {
     return Cookies.get('upload-filter');
   }
 
-  function createFiltertArr() {
-    var filterList = filterForm['upload-filter'];
-    var filterListLength = filterList.length;
-    var filterArr = [];
-    for (i = 0; i < filterListLength; i++) {
-      filterArr[i] = filterList[i];
-    }
-    setCurrentFilterName(filterArr);
-  }
-
-  function setCurrentFilterName(arr) {
-    if (getFilterName() === null) {
+  function setCurrentFilterName() {
+    if (getFilterNameFromCookies() === null) {
       return;
     }
 
-    for (i = 0; i < arr.length; i++) {
-      if (arr[i].id === 'upload-' + getFilterName()) {
-        arr[i].setAttribute('checked', 'checked');
+    var filterList = filterForm['upload-filter'];
+    for (i = 0; i < filterList.length; i++) {
+      if (filterList[i].id === 'upload-' + getFilterNameFromCookies()) {
+        filterList[i].setAttribute('checked', 'checked');
+        filterForm.onchange();
       }
     }
-    filterForm.onchange();
   }
 
   /**
@@ -335,7 +327,7 @@
     // убрать предыдущий примененный класс. Для этого нужно или запоминать его
     // состояние или просто перезаписывать.
     filterImage.className = 'filter-image-preview ' + filterMap[selectedFilter];
-    setFilterName(filterMap[selectedFilter]);
+    setCookie(filterMap[selectedFilter]);
   };
 
   cleanupResizer();
