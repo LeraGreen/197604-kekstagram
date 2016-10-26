@@ -225,7 +225,7 @@
       var image = currentResizer.exportImage().src;
 
       var thumbnails = filterForm.querySelectorAll('.upload-filter-preview');
-      for (var i = 0; i < thumbnails.length; i++) {
+      for (i = 0; i < thumbnails.length; i++) {
         thumbnails[i].style.backgroundImage = 'url(' + image + ')';
       }
 
@@ -233,6 +233,7 @@
 
       resizeForm.classList.add('invisible');
       filterForm.classList.remove('invisible');
+      setCurrentFilterName();
     }
   };
 
@@ -247,17 +248,56 @@
     resizeForm.classList.remove('invisible');
   };
 
+  var DAYS = 24 * 60 * 60 * 1000;
+
+  function getLastGraceBithday() {
+    var graceBirthday = new Date();
+    graceBirthday.setMonth(11, 9);
+    var now = new Date();
+
+    if (graceBirthday > now) {
+      return graceBirthday.setFullYear(graceBirthday.getFullYear() - 1);
+    }
+    return graceBirthday;
+  }
+
+  function getExpireCookiesDate() {
+    return Math.floor((new Date() - getLastGraceBithday()) / DAYS);
+  }
+
+  function setCookie(filter) {
+    Cookies.set('upload-filter', filter, { expires: getExpireCookiesDate() });
+  }
+
+  function getFilterNameFromCookies() {
+    return Cookies.get('upload-filter');
+  }
+
+  function setCurrentFilterName() {
+    if (getFilterNameFromCookies() === null) {
+      return;
+    }
+
+    var filterList = filterForm['upload-filter'];
+    for (i = 0; i < filterList.length; i++) {
+      if (filterList[i].id === 'upload-' + getFilterNameFromCookies()) {
+        filterList[i].setAttribute('checked', 'checked');
+        filterForm.onchange();
+      }
+    }
+  }
+
   /**
    * Отправка формы фильтра. Возвращает в начальное состояние, предварительно
    * записав сохраненный фильтр в cookie.
    * @param {Event} evt
    */
+
   filterForm.onsubmit = function(evt) {
     evt.preventDefault();
 
     cleanupResizer();
     updateBackground();
-
     filterForm.classList.add('invisible');
     uploadForm.classList.remove('invisible');
   };
@@ -287,6 +327,7 @@
     // убрать предыдущий примененный класс. Для этого нужно или запоминать его
     // состояние или просто перезаписывать.
     filterImage.className = 'filter-image-preview ' + filterMap[selectedFilter];
+    setCookie(filterMap[selectedFilter]);
   };
 
   cleanupResizer();
