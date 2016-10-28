@@ -132,15 +132,16 @@ function addPictureBlock() {
   makePicturesArr().forEach(function() {
     picturesContainer.appendChild(addPhoto(arrlikesCommentsPhotos));
   });
+  addLikesComments();
 }
 
-/*function addLikesComments() {
+function addLikesComments() {
   var pictureCollection = document.querySelectorAll('.picture');
   for (var i = 0; i < pictureCollection.length; i++) {
     pictureCollection[i].querySelector('.picture-comments').insertAdjacentHTML('afterBegin', arrlikesCommentsPhotos[i].comments);
     pictureCollection[i].querySelector('.picture-likes').insertAdjacentHTML('afterBegin', arrlikesCommentsPhotos[i].likes);
  }
-}*/
+}
 
 function addPhoto(arr) {
   var newImg = new Image();
