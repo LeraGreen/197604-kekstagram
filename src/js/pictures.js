@@ -120,17 +120,18 @@ function getElement() {
 function createNode(el) {
   var newImg = new Image();
   var newPic = templateContainer.querySelector('.picture').cloneNode(true);
-  if (el['preview']) {
-        newImg.src = el['preview'];
-      } else {
-        newImg.src = el['url'];
-      }
 
   newImg.onload = function() {
     newPic.querySelector('img').setAttribute('src', newImg.src);
     newPic.querySelector('.picture-likes').insertAdjacentHTML('afterBegin', el['likes']);
     newPic.querySelector('.picture-comments').insertAdjacentHTML('afterBegin', el['comments']);
   }
+
+  if (el['preview']) {
+      newImg.src = el['preview'];
+    } else {
+      newImg.src = el['url'];
+    }
 
   newImg.onerror = function() {
     newPic.classList.add('picture-load-failure');
