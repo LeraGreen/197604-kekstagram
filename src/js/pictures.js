@@ -143,6 +143,7 @@ function render() {
    }
   }
 
+/*Как связать photoCard с img на странице и сделать, чтобы у каждого блока была разная ссылка на картинку, в этом мой вопрос*/
   /*function createImage() {
     var photoCard = new Image();
 
