@@ -111,10 +111,18 @@ var template = document.querySelector('#picture-template');
 var templateContainer = 'content' in template ? template.content : template;
 var picturesContainer = document.querySelector('.pictures');
 
-function getElement() {
-  arrlikesCommentsPhotos.forEach(function(item){
-    createNode(item);
+function hideFilters() {
+  document.querySelector('.filters').classList.add('hidden');
+}
+
+function addPictureBlock(callback) {
+  arrlikesCommentsPhotos.forEach(function(item) {
+    picturesContainer.appendChild(createNode(item));
   });
+
+  if (typeof callback === 'function') {
+    callback();
+  }
 }
 
 function createNode(el) {
@@ -123,15 +131,17 @@ function createNode(el) {
 
   newImg.onload = function() {
     newPic.querySelector('img').setAttribute('src', newImg.src);
+    newPic.querySelector('img').setAttribute('width', 182);
+    newPic.querySelector('img').setAttribute('height', 182);
     newPic.querySelector('.picture-likes').insertAdjacentHTML('afterBegin', el['likes']);
     newPic.querySelector('.picture-comments').insertAdjacentHTML('afterBegin', el['comments']);
-  }
+  };
 
   if (el['preview']) {
-      newImg.src = el['preview'];
-    } else {
-      newImg.src = el['url'];
-    }
+    newImg.src = el['preview'];
+  } else {
+    newImg.src = el['url'];
+  }
 
   newImg.onerror = function() {
     newPic.classList.add('picture-load-failure');
@@ -140,7 +150,11 @@ function createNode(el) {
   return newPic;
 }
 
-getElement();
+hideFilters();
+addPictureBlock(function() {
+  document.querySelector('.filters').classList.remove('hidden');
+});
+
 
 
 
