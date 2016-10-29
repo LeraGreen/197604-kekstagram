@@ -266,11 +266,11 @@
   }
 
   function setCookie(filter) {
-    Cookies.set('upload-filter', filter, { expires: getExpireCookiesDate() });
+    window.Cookies.set('upload-filter', filter, { expires: getExpireCookiesDate() });
   }
 
   function getFilterNameFromCookies() {
-    return Cookies.get('upload-filter');
+    return window.Cookies.get('upload-filter');
   }
 
   function setCurrentFilterName() {
