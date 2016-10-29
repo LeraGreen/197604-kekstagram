@@ -125,29 +125,25 @@ function addPictureBlock(callback) {
   }
 }
 
-function createNode(el) {
-  var newImg = new Image();
-  var newPic = templateContainer.querySelector('.picture').cloneNode(true);
+function createNode(obj) {
+  var img = new Image();
+  var imgNode = templateContainer.querySelector('.picture').cloneNode(true);
 
-  newImg.onload = function() {
-    newPic.querySelector('img').setAttribute('src', newImg.src);
-    newPic.querySelector('img').setAttribute('width', 182);
-    newPic.querySelector('img').setAttribute('height', 182);
-    newPic.querySelector('.picture-likes').insertAdjacentHTML('afterBegin', el['likes']);
-    newPic.querySelector('.picture-comments').insertAdjacentHTML('afterBegin', el['comments']);
+  img.onload = function() {
+    imgNode.querySelector('img').setAttribute('src', img.src);
+    imgNode.querySelector('img').setAttribute('width', 182);
+    imgNode.querySelector('img').setAttribute('height', 182);
+    imgNode.querySelector('.picture-likes').insertAdjacentHTML('afterBegin', obj.likes);
+    imgNode.querySelector('.picture-comments').insertAdjacentHTML('afterBegin', obj.comments);
   };
 
-  if (el['preview']) {
-    newImg.src = el['preview'];
-  } else {
-    newImg.src = el['url'];
-  }
+  img.src = obj.preview ? obj.preview : obj.url;
 
-  newImg.onerror = function() {
-    newPic.classList.add('picture-load-failure');
+  img.onerror = function() {
+    imgNode.classList.add('picture-load-failure');
   };
 
-  return newPic;
+  return imgNode;
 }
 
 hideFilters();
