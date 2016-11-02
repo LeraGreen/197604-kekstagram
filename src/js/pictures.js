@@ -1,9 +1,14 @@
 'use strict';
 
-define(['./hide-block.js', './load.js', './review.js'],
-  function(hideBlock, load, review) {
+define(['./load.js', './review.js'],
+  function(load, review) {
+
+    function hideFilters() {
+      document.querySelector('.filters').classList.add('hidden');
+    }
+
     function addPictureBlock(arr, callback) {
-      hideBlock();
+      hideFilters();
       arr.forEach(function(item) {
         document.querySelector('.pictures').appendChild(review(item));
       });
