@@ -1,7 +1,7 @@
 'use strict';
 
-define(['./load.js', './review.js'],
-  function(load, review) {
+define(['./load.js', './gallery.js'],
+  function(load, gallery) {
 
     function hideFilters() {
       document.querySelector('.filters').classList.add('hidden');
@@ -9,9 +9,9 @@ define(['./load.js', './review.js'],
 
     function addPictureBlock(arr, callback) {
       hideFilters();
-      arr.forEach(function(item) {
-        document.querySelector('.pictures').appendChild(review(item));
-      });
+      gallery.setPictures(arr);
+      gallery.render();
+      // gallery.show(0);
 
       if (typeof callback === 'function') {
         callback();
