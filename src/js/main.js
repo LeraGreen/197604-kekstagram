@@ -11,3 +11,7 @@ define(['./upload.js'], function(upload) {
 define(['./resizer.js'], function(resizer) {
   return resizer;
 });
+
+define(['./gallery.js'], function(gallery) {
+  return gallery;
+});
