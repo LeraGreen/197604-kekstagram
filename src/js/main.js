@@ -1,17 +1,17 @@
 'use strict';
 
-define(['./pictures.js'], function(pictures) {
+require(['./js/pictures.js'], function(pictures) {
   return pictures;
 });
 
-define(['./upload.js'], function(upload) {
+require(['./js/upload.js'], function(upload) {
   return upload;
 });
 
-define(['./resizer.js'], function(resizer) {
+require(['./js/resizer.js'], function(resizer) {
   return resizer;
 });
 
-define(['./gallery.js'], function(gallery) {
+require(['./js/gallery.js'], function(gallery) {
   return gallery;
 });
