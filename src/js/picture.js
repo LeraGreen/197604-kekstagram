@@ -1,6 +1,6 @@
 'use strict';
 
-define(function(){
+define(function() {
 
 
   var Picture = function(data) {
