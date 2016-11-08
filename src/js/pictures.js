@@ -1,6 +1,6 @@
 'use strict';
 
-define(['./load.js', './gallery.js'],
+define(['./load.js', './gallery.js', './picture.js'],
   function(load, gallery) {
 
     function hideFilters() {
@@ -11,7 +11,6 @@ define(['./load.js', './gallery.js'],
       hideFilters();
       gallery.setPictures(arr);
       gallery.render();
-      // gallery.show(0);
 
       if (typeof callback === 'function') {
         callback();
