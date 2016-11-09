@@ -1,6 +1,6 @@
 'use strict';
 
-define(['./load.js', './gallery.js'],
+define(['./load.js', './gallery.js', './picture.js'],
   function(load, gallery) {
 
     function hideFilters() {

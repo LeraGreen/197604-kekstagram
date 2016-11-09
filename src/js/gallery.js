@@ -1,6 +1,6 @@
 'use strict';
 
-define(['./review.js'], function(review) {
+define(['./picture.js'], function(Picture) {
 
   var Gallery = function() {
     this.activePicture = null;
@@ -17,12 +17,12 @@ define(['./review.js'], function(review) {
   Gallery.prototype.render = function() {
     var self = this;
     this.pictures.forEach(function(item, i) {
-      var el = review(item);
-      el.onclick = function() {
+      var picture = new Picture(item);
+      picture.onclick = function() {
         self.show(i);
         return false;
       };
-      document.querySelector('.pictures').appendChild(el);
+      document.querySelector('.pictures').appendChild(picture.element);
     });
   };
 
