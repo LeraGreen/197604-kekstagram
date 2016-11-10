@@ -8,26 +8,15 @@ define(function() {
     }).join('&');
   }
 
-  function createCallBack (url, params, callback) {
+  function createCallBack(url, params, callback) {
     var xhr = new XMLHttpRequest();
+    xhr.open('GET', url + '?' + getSearchSrting(params));
     xhr.onload = function(evt) {
       var data = JSON.parse(evt.target.response);
       callback(data);
     };
-    xhr.open('GET', url + '?' + getSearchSrting(params));
     xhr.send();
-  };
+  }
 
   return createCallBack;
-
-  //function createCallBack(url, callback) {
-    //var script = document.createElement('script');
-    //script.src = url;
-    //document.body.appendChild(script);
-
-    //window.JSONPCallback = function(data) {
-    //  callback(data);
-    //};
-  //}
-  //return createCallBack;
 });
