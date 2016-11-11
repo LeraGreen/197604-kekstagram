@@ -1,6 +1,6 @@
 'use strict';
 
-define(['./load.js', './gallery.js', './picture.js'],
+define(['./load.js', './gallery.js'],
   function(load, gallery) {
 
     function hideFilters() {
@@ -18,26 +18,15 @@ define(['./load.js', './gallery.js', './picture.js'],
     }
 
     var pageNumber = 0;
-    var pageSize = 12;
+    var pageSize = 4;
     var activeFilter = 'filter-popular';
     var footer = document.querySelector('footer');
     var throttleTimeOut = 100;
 
     function changeFilter(filterID) {
       document.querySelector('.pictures').innerHTML = '';
-      activeFilter = filterID;
       pageNumber = 0;
       loadPhotos(filterID, pageNumber);
-    }
-
-    function calcPointRightDif() {
-      var picturesBlock = document.querySelector('.pictures');
-      var picturesBlockRight = Math.floor(picturesBlock.getBoundingClientRect().right);
-      var pictureArr = document.querySelectorAll('.picture');
-      var lastPicture = pictureArr[pictureArr.length - 1];
-      var lastPictureRigth = Math.floor(lastPicture.getBoundingClientRect().right);
-      var lastPictureMargin = parseInt(getComputedStyle(lastPicture).marginRight, 10);
-      return (picturesBlockRight - lastPictureRigth) > lastPictureMargin;
     }
 
     function calcBottomIndent() {
@@ -50,20 +39,25 @@ define(['./load.js', './gallery.js', './picture.js'],
     }
 
     function setScroll() {
-      window.addEventListener('scroll', function() {
-        if (Date.now() - lastCall >= throttleTimeOut) {
-          if (footer.getBoundingClientRect().top - window.innerHeight <= calcBottomIndent() &&
-            calcPointRightDif()) {
-            loadPhotos(activeFilter, ++pageNumber);
-          }
-          lastCall = Date.now();
-        }
-      });
+      window.addEventListener('scroll', checkThrottle);
+    }
+
+    function checkThrottle() {
+      if (Date.now() - lastCall >= throttleTimeOut) {
+        checkNextPage();
+      }
+    }
+
+    function checkNextPage() {
+      if (footer.getBoundingClientRect().top - window.innerHeight <= calcBottomIndent()) {
+        loadPhotos(activeFilter, ++pageNumber);
+      }
+      lastCall = Date.now();
     }
 
     var lastCall = Date.now();
 
-    function setThrottle() {
+    function checkFilter() {
       document.querySelector('.filters').addEventListener('change', function(evt) {
         if (evt.target.classList.contains('filters-radio')) {
           changeFilter(evt.target.id);
@@ -71,23 +65,34 @@ define(['./load.js', './gallery.js', './picture.js'],
       });
     }
 
+    function checkEndList(data, from, to) {
+      if (data.length < to - from) {
+        window.removeEventListener('scroll', checkThrottle);
+      } else {
+        checkNextPage();
+      }
+    }
+
     function loadPhotos(filter, currentPage) {
+      var from = currentPage * pageSize;
+      var to = (currentPage * pageSize) + pageSize;
       load('/api/pictures', {
-        from: currentPage * pageSize,
-        to: (currentPage * pageSize) + pageSize,
+        from: from,
+        to: to,
         filter: filter
       },
       function(data) {
         var pictures = data;
         addPictureBlock(pictures, function() {
           document.querySelector('.filters').classList.remove('hidden');
+          checkEndList(data, from, to);
         });
       });
     }
 
     changeFilter(activeFilter);
     setScroll();
-    setThrottle();
+    checkFilter();
   });
 
 

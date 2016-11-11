@@ -2,7 +2,7 @@
 
 define(function() {
 
-  function getSearchSrting(params) {
+  function getSearchString(params) {
     return Object.keys(params).map(function(param) {
       return [param, params[param]].join('=');
     }).join('&');
@@ -10,7 +10,7 @@ define(function() {
 
   function createCallBack(url, params, callback) {
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', url + '?' + getSearchSrting(params));
+    xhr.open('GET', url + '?' + getSearchString(params));
     xhr.onload = function(evt) {
       var data = JSON.parse(evt.target.response);
       callback(data);
