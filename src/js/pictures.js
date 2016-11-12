@@ -17,7 +17,7 @@ define(['./load.js', './gallery.js'],
     }
 
     var pageNumber = 0;
-    var pageSize = 4;
+    var pageSize = 12;
     var activeFilter = 'filter-popular';
     var footer = document.querySelector('footer');
     var throttleTimeOut = 100;
@@ -25,6 +25,7 @@ define(['./load.js', './gallery.js'],
     function changeFilter(filterID) {
       document.querySelector('.pictures').innerHTML = '';
       pageNumber = 0;
+      activeFilter = filterID;
       setScroll();
       gallery.pictures = [];
       loadPhotos(filterID, pageNumber);
