@@ -10,13 +10,17 @@ define(['./picture.js'], function(Picture) {
     this.overlayImage = document.querySelector('.gallery-overlay-image');
   };
 
-  Gallery.prototype.setPictures = function(pictures) {
-    this.pictures = pictures;
+  Gallery.prototype.setPictures = function(arr) {
+    var self = this;
+    arr.forEach(function(item, i) {
+      self.pictures.push(item);
+    });
+    this.render(arr);
   };
 
-  Gallery.prototype.render = function() {
+  Gallery.prototype.render = function(arr) {
     var self = this;
-    this.pictures.forEach(function(item, i) {
+    arr.forEach(function(item, i) {
       var picture = new Picture(item);
       picture.onclick = function() {
         self.show(i);
