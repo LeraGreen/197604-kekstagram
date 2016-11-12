@@ -10,7 +10,6 @@ define(['./load.js', './gallery.js'],
     function addPictureBlock(arr, callback) {
       hideFilters();
       gallery.setPictures(arr);
-      gallery.render();
 
       if (typeof callback === 'function') {
         callback();
@@ -26,16 +25,22 @@ define(['./load.js', './gallery.js'],
     function changeFilter(filterID) {
       document.querySelector('.pictures').innerHTML = '';
       pageNumber = 0;
+      setScroll();
+      gallery.pictures = [];
       loadPhotos(filterID, pageNumber);
     }
 
     function calcBottomIndent() {
       var pictureArr = document.querySelectorAll('.picture');
       var lastPicture = pictureArr[pictureArr.length - 1];
-      var lastPictureTop = lastPicture.getBoundingClientRect().top;
-      var lastPictureBottom = lastPicture.getBoundingClientRect().bottom;
-      var lastPictureHight = lastPictureBottom - lastPictureTop;
-      return lastPictureHight;
+      if (lastPicture != undefined) {
+        var lastPictureTop = lastPicture.getBoundingClientRect().top;
+        var lastPictureBottom = lastPicture.getBoundingClientRect().bottom;
+        var lastPictureHight = lastPictureBottom - lastPictureTop;
+        return lastPictureHight;
+      } else {
+        return 100;
+      }
     }
 
     function setScroll() {
