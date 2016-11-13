@@ -32,7 +32,8 @@ define(function() {
     for (var i = 0; i < list.length; i++) {
       if (list[i].id === 'upload-' + getFilterNameFromCookies()) {
         list[i].setAttribute('checked', 'checked');
-        form.onchange();
+        var event = new Event('change');
+        form.dispatchEvent(event);
       }
     }
   }

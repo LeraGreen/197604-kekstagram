@@ -81,7 +81,7 @@ define(['./cookies.js'], function(cookies) {
       if (inputElement.id === 'resize-x' || inputElement.id === 'resize-y') {
         inputElement.min = 0;
       }
-      inputElement.oninput = validate;
+      inputElement.addEventListener('input', validate);
     }
 
     function validate() {
@@ -167,7 +167,7 @@ define(['./cookies.js'], function(cookies) {
      * и показывается форма кадрирования.
      * @param {Event} evt
      */
-    uploadForm.onchange = function(evt) {
+    uploadForm.addEventListener('change', function(evt) {
       var element = evt.target;
       if (element.id === 'upload-file') {
         // Проверка типа загружаемого файла, тип должен быть изображением
@@ -177,7 +177,7 @@ define(['./cookies.js'], function(cookies) {
 
           showMessage(Action.UPLOADING);
 
-          fileReader.onload = function() {
+          fileReader.addEventListener('load', function() {
             cleanupResizer();
 
             currentResizer = new Resizer(fileReader.result);
@@ -188,7 +188,7 @@ define(['./cookies.js'], function(cookies) {
             resizeForm.classList.remove('invisible');
 
             hideMessage();
-          };
+          });
 
           fileReader.readAsDataURL(element.files[0]);
         } else {
@@ -196,14 +196,14 @@ define(['./cookies.js'], function(cookies) {
           showMessage(Action.ERROR);
         }
       }
-    };
+    });
 
     /**
      * Обработка сброса формы кадрирования. Возвращает в начальное состояние
      * и обновляет фон.
      * @param {Event} evt
      */
-    resizeForm.onreset = function(evt) {
+    resizeForm.addEventListener('reset', function(evt) {
       evt.preventDefault();
 
       cleanupResizer();
@@ -211,14 +211,38 @@ define(['./cookies.js'], function(cookies) {
 
       resizeForm.classList.add('invisible');
       uploadForm.classList.remove('invisible');
-    };
+    });
+
+    var resizeX = document.querySelector('#resize-x');
+    var resizeY = document.querySelector('#resize-y');
+    var resizeSize = document.querySelector('#resize-size');
+
+    var eventResize = new CustomEvent('resizerchange');
+    window.addEventListener('resizerchange', function() {
+      if (currentResizer) {
+        resizeX.value = Math.round(currentResizer.getConstraint().x);
+        resizeY.value = Math.round(currentResizer.getConstraint().y);
+        resizeSize.value = Math.round(currentResizer.getConstraint().side);
+      }
+    });
+
+    window.dispatchEvent(eventResize);
+
+    var uploadResizeControls = document.querySelector('.upload-resize-controls');
+    uploadResizeControls.addEventListener('input', function() {
+      var valueX = resizeX.value;
+      var valueY = resizeY.value;
+      var valueSize = resizeSize.value;
+
+      currentResizer.setConstraint(valueX, valueY, valueSize);
+    });
 
     /**
      * Обработка отправки формы кадрирования. Если форма валидна, экспортирует
      * кропнутое изображение в форму добавления фильтра и показывает ее.
      * @param {Event} evt
      */
-    resizeForm.onsubmit = function(evt) {
+    resizeForm.addEventListener('submit', function(evt) {
       evt.preventDefault();
 
       if (resizeFormIsValid()) {
@@ -235,18 +259,18 @@ define(['./cookies.js'], function(cookies) {
         filterForm.classList.remove('invisible');
         cookies.setFilterName(filterForm['upload-filter'], filterForm);
       }
-    };
+    });
 
     /**
      * Сброс формы фильтра. Показывает форму кадрирования.
      * @param {Event} evt
      */
-    filterForm.onreset = function(evt) {
+    filterForm.addEventListener('reset', function(evt) {
       evt.preventDefault();
 
       filterForm.classList.add('invisible');
       resizeForm.classList.remove('invisible');
-    };
+    });
 
     /**
      * Отправка формы фильтра. Возвращает в начальное состояние, предварительно
@@ -254,20 +278,20 @@ define(['./cookies.js'], function(cookies) {
      * @param {Event} evt
      */
 
-    filterForm.onsubmit = function(evt) {
+    filterForm.addEventListener('submit', function(evt) {
       evt.preventDefault();
 
       cleanupResizer();
       updateBackground();
       filterForm.classList.add('invisible');
       uploadForm.classList.remove('invisible');
-    };
+    });
 
     /**
      * Обработчик изменения фильтра. Добавляет класс из filterMap соответствующий
      * выбранному значению в форме.
      */
-    filterForm.onchange = function() {
+    filterForm.addEventListener('change', function() {
       if (!filterMap) {
         // Ленивая инициализация. Объект не создается до тех пор, пока
         // не понадобится прочитать его в первый раз, а после этого запоминается
@@ -289,7 +313,7 @@ define(['./cookies.js'], function(cookies) {
       // состояние или просто перезаписывать.
       filterImage.className = 'filter-image-preview ' + filterMap[selectedFilter];
       cookies.setNewCookie(filterMap[selectedFilter]);
-    };
+    });
 
     cleanupResizer();
     updateBackground();

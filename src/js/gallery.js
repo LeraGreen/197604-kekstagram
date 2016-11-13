@@ -12,7 +12,7 @@ define(['./picture.js'], function(Picture) {
 
   Gallery.prototype.setPictures = function(arr) {
     var self = this;
-    arr.forEach(function(item, i) {
+    arr.forEach(function(item) {
       self.pictures.push(item);
     });
     this.render(arr);
