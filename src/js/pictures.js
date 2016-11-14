@@ -34,7 +34,7 @@ define(['./load.js', './gallery.js'],
     function calcBottomIndent() {
       var pictureArr = document.querySelectorAll('.picture');
       var lastPicture = pictureArr[pictureArr.length - 1];
-      if (lastPicture != undefined) {
+      if (lastPicture) {
         var lastPictureTop = lastPicture.getBoundingClientRect().top;
         var lastPictureBottom = lastPicture.getBoundingClientRect().bottom;
         var lastPictureHight = lastPictureBottom - lastPictureTop;
