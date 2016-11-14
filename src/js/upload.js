@@ -230,9 +230,9 @@ define(['./cookies.js'], function(cookies) {
 
     var uploadResizeControls = document.querySelector('.upload-resize-controls');
     uploadResizeControls.addEventListener('input', function() {
-      var valueX = resizeX.value;
-      var valueY = resizeY.value;
-      var valueSize = resizeSize.value;
+      var valueX = parseInt(resizeX.value, 10);
+      var valueY = parseInt(resizeY.value, 10);
+      var valueSize = parseInt(resizeSize.value, 10);
 
       currentResizer.setConstraint(valueX, valueY, valueSize);
     });
