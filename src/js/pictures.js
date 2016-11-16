@@ -21,6 +21,7 @@ define(['./load.js', './gallery.js'],
     var activeFilter = 'filter-popular';
     var footer = document.querySelector('footer');
     var throttleTimeOut = 100;
+    var optimizedScroll = throttle(checkNextPage, throttleTimeOut);
 
     function changeFilter(filterID) {
       document.querySelector('.pictures').innerHTML = '';
@@ -44,24 +45,39 @@ define(['./load.js', './gallery.js'],
       }
     }
 
+    // function setScroll() {
+    // window.addEventListener('scroll', checkThrottle);
+    // }
+
     function setScroll() {
-      window.addEventListener('scroll', checkThrottle);
+      window.addEventListener('scroll', optimizedScroll);
     }
 
-    function checkThrottle() {
-      if (Date.now() - lastCall >= throttleTimeOut) {
-        checkNextPage();
-      }
+    // function checkThrottle() {
+    //   if (Date.now() - lastCall >= throttleTimeOut) {
+    //     checkNextPage();
+    //   }
+    // }
+
+    function throttle(fn, ms) {
+      var lastCall = Date.now();
+      return function() {
+        if (Date.now() - lastCall >= ms) {
+          fn();
+          lastCall = Date.now();
+        }
+      };
     }
+
 
     function checkNextPage() {
       if (footer.getBoundingClientRect().top - window.innerHeight <= calcBottomIndent()) {
         loadPhotos(activeFilter, ++pageNumber);
       }
-      lastCall = Date.now();
+      //lastCall = Date.now();
     }
 
-    var lastCall = Date.now();
+    //var lastCall = Date.now();
 
     function checkFilter() {
       document.querySelector('.filters').addEventListener('change', function(evt) {
@@ -73,7 +89,7 @@ define(['./load.js', './gallery.js'],
 
     function checkEndList(data, from, to) {
       if (data.length < to - from) {
-        window.removeEventListener('scroll', checkThrottle);
+        window.removeEventListener('scroll', optimizedScroll);
       } else {
         checkNextPage();
       }
