@@ -54,25 +54,15 @@ define(['./load.js', './gallery.js'],
       }
     }
 
-    // function setScroll() {
-    // window.addEventListener('scroll', checkThrottle);
-    // }
-
     function setScroll() {
       window.addEventListener('scroll', optimizedScroll);
     }
 
-    // function checkThrottle() {
-    //   if (Date.now() - lastCall >= throttleTimeOut) {
-    //     checkNextPage();
-    //   }
-    // }
-
-    function throttle(fn, ms) {
+    function throttle(funct, timeOut) {
       var lastCall = Date.now();
       return function() {
-        if (Date.now() - lastCall >= ms) {
-          fn();
+        if (Date.now() - lastCall >= timeOut) {
+          funct();
           lastCall = Date.now();
         }
       };
@@ -83,10 +73,7 @@ define(['./load.js', './gallery.js'],
       if (footer.getBoundingClientRect().top - window.innerHeight <= calcBottomIndent()) {
         loadPhotos(setActiveFilter(), ++pageNumber);
       }
-      //lastCall = Date.now();
     }
-
-    //var lastCall = Date.now();
 
     function checkFilter() {
       document.querySelector('.filters').addEventListener('change', function(evt) {
