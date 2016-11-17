@@ -8,6 +8,23 @@
 'use strict';
 define(['./cookies.js'], function(cookies) {
   (function() {
+    try {
+      new CustomEvent('IE has CustomEvent, but doesn\'t support constructor'); // eslint-disable-line
+    } catch (e) {
+      window.CustomEvent = function(event, params) {
+        var evt;
+        params = params || {
+          bubbles: false,
+          cancelable: false,
+          detail: null
+        };
+        evt = document.createEvent('CustomEvent');
+        evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
+        return evt;
+      };
+
+      CustomEvent.prototype = Object.create(window.Event.prototype);
+    }
     /** @enum {string} */
     var FileType = {
       'GIF': '',

@@ -32,7 +32,12 @@ define(function() {
     for (var i = 0; i < list.length; i++) {
       if (list[i].id === 'upload-' + getFilterNameFromCookies()) {
         list[i].setAttribute('checked', 'checked');
-        var event = new Event('change');
+        var event = null;
+        if (navigator.appName.indexOf('Internet Explorer') !== -1) {
+          event = new CustomEvent('change');
+        } else {
+          event = new Event('change');
+        }
         form.dispatchEvent(event);
       }
     }
