@@ -68,7 +68,6 @@ define(['./load.js', './gallery.js'],
       };
     }
 
-
     function checkNextPage() {
       if (footer.getBoundingClientRect().top - window.innerHeight <= calcBottomIndent()) {
         loadPhotos(setActiveFilter(), ++pageNumber);
