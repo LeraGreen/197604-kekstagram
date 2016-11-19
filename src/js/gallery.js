@@ -8,44 +8,49 @@ define(['./picture.js'], function(Picture) {
     this.overlay = document.querySelector('.gallery-overlay');
     this.overlayClose = document.querySelector('.gallery-overlay-close');
     this.overlayImage = document.querySelector('.gallery-overlay-image');
+
+    this.hide = this.hide.bind(this);
+    this.overlayClose.addEventListener('click', this.hide);
+
+    this.showNextPicture = this.showNextPicture.bind(this);
+    this.overlayImage.addEventListener('click', this.showNextPicture);
+
   };
 
   Gallery.prototype.setPictures = function(arr) {
-    var self = this;
     arr.forEach(function(item) {
-      self.pictures.push(item);
-    });
+      this.pictures.push(item);
+    }, this);
     this.render(arr);
   };
 
   Gallery.prototype.render = function(arr) {
-    var self = this;
     arr.forEach(function(item, i) {
       var picture = new Picture(item);
-      picture.onclick = function() {
-        self.show(i);
+      picture.index = i;
+
+      picture.onclick = function(index) {
+        this.show(index);
         return false;
       };
+
+      picture.onclick = picture.onclick.bind(this);
       document.querySelector('.pictures').appendChild(picture.element);
-    });
+    }, this);
   };
 
   Gallery.prototype.show = function(number) {
-    var self = this;
-    this.overlayClose.onclick = function() {
-      self.hide();
-    };
-    this.overlayImage.onclick = function(evt) {
-      if (evt.target === self.overlayImage) {
-        if (self.activePicture === self.pictures.length - 1) {
-          self.setActivePicture(0);
-        }
-        self.setActivePicture(self.activePicture + 1);
-      }
-    };
-
     this.overlay.classList.remove('invisible');
     this.setActivePicture(number);
+  };
+
+  Gallery.prototype.showNextPicture = function(evt) {
+    if (evt.target === this.overlayImage) {
+      if (this.activePicture === this.pictures.length - 1) {
+        this.setActivePicture(0);
+      }
+      this.setActivePicture(this.activePicture + 1);
+    }
   };
 
   Gallery.prototype.hide = function() {
@@ -53,16 +58,15 @@ define(['./picture.js'], function(Picture) {
   };
 
   Gallery.prototype.setActivePicture = function(number) {
-    var self = this;
     this.activePicture = number;
     this.pictures.forEach(function(item, i) {
       if (i === number) {
         var imgSrc = item.preview ? item.preview : item.url;
-        self.overlayImage.setAttribute('src', imgSrc);
+        this.overlayImage.setAttribute('src', imgSrc);
         document.querySelector('.likes-count').innerHTML = item.likes;
         document.querySelector('.comments-count').innerHTML = item.comments;
       }
-    });
+    }, this);
 
   };
 
