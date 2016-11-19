@@ -1,19 +1,21 @@
 'use strict';
 
-define(function(){
+define(function() {
 
   var SuperClass = function(data) {
     this.element = data;
   };
 
-  SuperClass.prototype.show = function(element, parent) {
+  SuperClass.prototype.show = function(parent, element) {
     parent.appendChild(element);
   };
 
-  SuperClass.prototype.remove = function(element, parent) {
-    parent.removeChild(element);
+  SuperClass.prototype.remove = function(element) {
+    if (element.parentNode) {
+      element.parentNode.removeChild(element);
+    }
+    return;
   };
 
   return SuperClass;
-
 });

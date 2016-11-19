@@ -16,6 +16,6 @@ define(['./gallery.js'], function(gallery) {
   return gallery;
 });
 
-define(['./utils.js'],function(utils){
+define(['./utils.js'], function(utils) {
   return utils;
 });
