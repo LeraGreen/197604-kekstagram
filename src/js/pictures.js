@@ -23,12 +23,7 @@ define(['./load.js', './gallery.js'],
     var optimizedScroll = throttle(checkNextPage, throttleTimeOut);
 
     function setActiveFilter() {
-      var activeFilter = localStorage.getItem('filter');
-      if(!activeFilter) {
-        localStorage.setItem('filter', 'filter-popular');
-        activeFilter = localStorage.getItem('filter');
-      }
-      return activeFilter;
+      return localStorage.getItem('filter') || 'filter-popular';
     }
 
     function changeFilter(filterID) {
@@ -58,11 +53,11 @@ define(['./load.js', './gallery.js'],
       window.addEventListener('scroll', optimizedScroll);
     }
 
-    function throttle(funct, timeOut) {
+    function throttle(callback, timeout) {
       var lastCall = Date.now();
       return function() {
-        if (Date.now() - lastCall >= timeOut) {
-          funct();
+        if (Date.now() - lastCall >= timeout) {
+          callback();
           lastCall = Date.now();
         }
       };
