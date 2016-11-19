@@ -162,9 +162,9 @@ define(function() {
         this._ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
 
         function drawOutFrame(arr) {
-          for ( var i = 0; i < arr.length; i++ ) {
-            self._ctx.fillRect( arr[i].x, arr[i].y, arr[i].width, arr[i].height );
-          }
+          arr.forEach(function(item) {
+            self._ctx.fillRect(item.x, item.y, item.width, item.height);
+          });
         }
 
         drawOutFrame(blocks);

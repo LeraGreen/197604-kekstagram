@@ -18,15 +18,19 @@ define(['./load.js', './gallery.js'],
 
     var pageNumber = 0;
     var pageSize = 12;
-    var activeFilter = 'filter-popular';
     var footer = document.querySelector('footer');
     var throttleTimeOut = 100;
     var optimizedScroll = throttle(checkNextPage, throttleTimeOut);
 
+    function setActiveFilter() {
+      return localStorage.getItem('filter') || 'filter-popular';
+    }
+
     function changeFilter(filterID) {
+      document.getElementById(filterID).checked = true;
       document.querySelector('.pictures').innerHTML = '';
       pageNumber = 0;
-      activeFilter = filterID;
+      localStorage.setItem('filter', filterID);
       setScroll();
       gallery.pictures = [];
       loadPhotos(filterID, pageNumber);
@@ -45,39 +49,25 @@ define(['./load.js', './gallery.js'],
       }
     }
 
-    // function setScroll() {
-    // window.addEventListener('scroll', checkThrottle);
-    // }
-
     function setScroll() {
       window.addEventListener('scroll', optimizedScroll);
     }
 
-    // function checkThrottle() {
-    //   if (Date.now() - lastCall >= throttleTimeOut) {
-    //     checkNextPage();
-    //   }
-    // }
-
-    function throttle(fn, ms) {
+    function throttle(callback, timeout) {
       var lastCall = Date.now();
       return function() {
-        if (Date.now() - lastCall >= ms) {
-          fn();
+        if (Date.now() - lastCall >= timeout) {
+          callback();
           lastCall = Date.now();
         }
       };
     }
 
-
     function checkNextPage() {
       if (footer.getBoundingClientRect().top - window.innerHeight <= calcBottomIndent()) {
-        loadPhotos(activeFilter, ++pageNumber);
+        loadPhotos(setActiveFilter(), ++pageNumber);
       }
-      //lastCall = Date.now();
     }
-
-    //var lastCall = Date.now();
 
     function checkFilter() {
       document.querySelector('.filters').addEventListener('change', function(evt) {
@@ -112,7 +102,7 @@ define(['./load.js', './gallery.js'],
       });
     }
 
-    changeFilter(activeFilter);
+    changeFilter(setActiveFilter());
     setScroll();
     checkFilter();
   });
