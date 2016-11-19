@@ -1,6 +1,7 @@
 'use strict';
 
-define(['./picture.js'], function(Picture) {
+define(['./picture.js', './utils.js', './superclass.js'],
+  function(Picture, utils, superclass) {
 
   var Gallery = function() {
     this.activePicture = null;

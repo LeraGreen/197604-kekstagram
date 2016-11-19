@@ -1,6 +1,6 @@
 'use strict';
 
-define(function() {
+define(['./utils.js', './superclass.js'], function(utils, superclass) {
 
 
   var Picture = function(data) {
