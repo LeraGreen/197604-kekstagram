@@ -11,6 +11,7 @@ define(['./picture.js', './utils.js', './superclass.js'],
       this.overlay = document.querySelector('.gallery-overlay');
       this.overlayClose = document.querySelector('.gallery-overlay-close');
       this.overlayImage = document.querySelector('.gallery-overlay-image');
+      this.overlayLikes = document.querySelector('.likes-count');
 
       this.hide = this.hide.bind(this);
       this.overlayClose.addEventListener('click', this.hide);
@@ -59,6 +60,10 @@ define(['./picture.js', './utils.js', './superclass.js'],
 
     Gallery.prototype.hide = function() {
       this.overlay.classList.add('invisible');
+    };
+
+    Gallery.prototype.changeNumberLikes = function() {
+
     };
 
     Gallery.prototype.setActivePicture = function(number) {
