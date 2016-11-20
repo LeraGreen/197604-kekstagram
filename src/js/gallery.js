@@ -22,13 +22,10 @@ define(['./picture.js', './utils.js', './superclass.js', './picture-model.js'],
     utils.inherit(SuperClass, Gallery);
 
     Gallery.prototype.setPictures = function(arr) {
-      arr.forEach(function(item) {
-        this.pictures.push(new PictureModel(item));
-      }, this);
       var pictureModelList = arr.map(function(item) {
         return (new PictureModel(item));
       });
-
+      this.pictures = this.pictures.concat(pictureModelList);
       this.render(pictureModelList);
     };
 
@@ -67,12 +64,12 @@ define(['./picture.js', './utils.js', './superclass.js', './picture-model.js'],
 
     Gallery.prototype.setActivePicture = function(number) {
       this.activePicture = number;
-      this.pictures.forEach(function(item, i) {
+      this.pictures.forEach(function(picture, i) {
         if (i === number) {
-          var imgSrc = item.getPictureUrl();
+          var imgSrc = picture.getUrl();
           this.overlayImage.setAttribute('src', imgSrc);
-          document.querySelector('.likes-count').innerHTML = item.getPictureLikes();
-          document.querySelector('.comments-count').innerHTML = item.getPictureComments();
+          document.querySelector('.likes-count').innerHTML = picture.getLikes();
+          document.querySelector('.comments-count').innerHTML = picture.getComments();
         }
       }, this);
     };

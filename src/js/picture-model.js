@@ -6,19 +6,19 @@ define(function() {
     this.data = data;
   };
 
-  PictureModel.prototype.getPictureUrl = function() {
-    return this.data.preview ? this.data.preview : this.data.url;
+  PictureModel.prototype.getUrl = function() {
+    return this.data.preview || this.data.url;
   };
 
-  PictureModel.prototype.getPictureLikes = function() {
+  PictureModel.prototype.getLikes = function() {
     return this.data.likes;
   };
 
-  PictureModel.prototype.getPictureComments = function() {
+  PictureModel.prototype.getComments = function() {
     return this.data.comments;
   };
 
-  PictureModel.prototype.getPictureCreated = function() {
+  PictureModel.prototype.getCreated = function() {
     return new Date(this.data.created);
   };
 

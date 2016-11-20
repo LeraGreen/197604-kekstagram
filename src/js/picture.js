@@ -35,11 +35,11 @@ define(['./utils.js', './superclass.js'], function(utils, SuperClass) {
       imgNode.querySelector('img').setAttribute('src', img.src);
       imgNode.querySelector('img').setAttribute('width', 182);
       imgNode.querySelector('img').setAttribute('height', 182);
-      imgNode.querySelector('.picture-likes').insertAdjacentHTML('afterBegin', this.model.getPictureLikes());
-      imgNode.querySelector('.picture-comments').insertAdjacentHTML('afterBegin', this.model.getPictureComments());
+      imgNode.querySelector('.picture-likes').insertAdjacentHTML('afterBegin', this.model.getLikes());
+      imgNode.querySelector('.picture-comments').insertAdjacentHTML('afterBegin', this.model.getComments());
     }.bind(this);
 
-    img.src = this.model.getPictureUrl();
+    img.src = this.model.getUrl();
 
     img.onerror = function() {
       imgNode.classList.add('picture-load-failure');
