@@ -1,75 +1,78 @@
 'use strict';
 
-define(['./picture.js'], function(Picture) {
+define(['./picture.js', './utils.js', './superclass.js'],
+  function(Picture, utils, SuperClass) {
 
-  var Gallery = function() {
-    this.activePicture = null;
-    this.pictures = [];
-    this.overlay = document.querySelector('.gallery-overlay');
-    this.overlayClose = document.querySelector('.gallery-overlay-close');
-    this.overlayImage = document.querySelector('.gallery-overlay-image');
+    var Gallery = function() {
+      SuperClass.call(this);
 
-    this.hide = this.hide.bind(this);
-    this.overlayClose.addEventListener('click', this.hide);
+      this.activePicture = null;
+      this.pictures = [];
+      this.overlay = document.querySelector('.gallery-overlay');
+      this.overlayClose = document.querySelector('.gallery-overlay-close');
+      this.overlayImage = document.querySelector('.gallery-overlay-image');
 
-    this.showNextPicture = this.showNextPicture.bind(this);
-    this.overlayImage.addEventListener('click', this.showNextPicture);
+      this.hide = this.hide.bind(this);
+      this.overlayClose.addEventListener('click', this.hide);
 
-  };
+      this.showNextPicture = this.showNextPicture.bind(this);
+      this.overlayImage.addEventListener('click', this.showNextPicture);
+    };
 
-  Gallery.prototype.setPictures = function(arr) {
-    arr.forEach(function(item) {
-      this.pictures.push(item);
-    }, this);
-    this.render(arr);
-  };
+    utils.inherit(SuperClass, Gallery);
 
-  Gallery.prototype.render = function(arr) {
-    arr.forEach(function(item, i) {
-      var picture = new Picture(item);
-      picture.index = i;
+    Gallery.prototype.setPictures = function(arr) {
+      arr.forEach(function(item) {
+        this.pictures.push(item);
+      }, this);
+      this.render(arr);
+    };
 
-      picture.onclick = function(index) {
-        this.show(index);
-        return false;
-      };
+    Gallery.prototype.render = function(arr) {
+      arr.forEach(function(item, i) {
+        var picture = new Picture(item);
+        picture.index = i;
 
-      picture.onclick = picture.onclick.bind(this);
-      document.querySelector('.pictures').appendChild(picture.element);
-    }, this);
-  };
+        picture.onclick = function(index) {
+          this.show(index);
+          return false;
+        };
 
-  Gallery.prototype.show = function(number) {
-    this.overlay.classList.remove('invisible');
-    this.setActivePicture(number);
-  };
+        picture.onclick = picture.onclick.bind(this);
+        SuperClass.prototype.show.call(this, document.querySelector('.pictures'), picture.element);
+      }, this);
+    };
 
-  Gallery.prototype.showNextPicture = function(evt) {
-    if (evt.target === this.overlayImage) {
-      if (this.activePicture === this.pictures.length - 1) {
-        this.setActivePicture(0);
+    Gallery.prototype.show = function(number) {
+      this.overlay.classList.remove('invisible');
+      this.setActivePicture(number);
+    };
+
+    Gallery.prototype.showNextPicture = function(evt) {
+      if (evt.target === this.overlayImage) {
+        if (this.activePicture === this.pictures.length - 1) {
+          this.setActivePicture(0);
+        }
+        this.setActivePicture(this.activePicture + 1);
       }
-      this.setActivePicture(this.activePicture + 1);
-    }
-  };
+    };
 
-  Gallery.prototype.hide = function() {
-    this.overlay.classList.add('invisible');
-  };
+    Gallery.prototype.hide = function() {
+      this.overlay.classList.add('invisible');
+    };
 
-  Gallery.prototype.setActivePicture = function(number) {
-    this.activePicture = number;
-    this.pictures.forEach(function(item, i) {
-      if (i === number) {
-        var imgSrc = item.preview ? item.preview : item.url;
-        this.overlayImage.setAttribute('src', imgSrc);
-        document.querySelector('.likes-count').innerHTML = item.likes;
-        document.querySelector('.comments-count').innerHTML = item.comments;
-      }
-    }, this);
+    Gallery.prototype.setActivePicture = function(number) {
+      this.activePicture = number;
+      this.pictures.forEach(function(item, i) {
+        if (i === number) {
+          var imgSrc = item.preview ? item.preview : item.url;
+          this.overlayImage.setAttribute('src', imgSrc);
+          document.querySelector('.likes-count').innerHTML = item.likes;
+          document.querySelector('.comments-count').innerHTML = item.comments;
+        }
+      }, this);
+    };
 
-  };
+    return new Gallery();
 
-  return new Gallery();
-
-});
+  });
