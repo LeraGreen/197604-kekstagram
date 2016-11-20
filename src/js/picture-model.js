@@ -24,10 +24,16 @@ define(function() {
 
   PictureModel.prototype.setLikesCount = function(number) {
     this.data.likes = number;
+    this.change();
   };
 
   PictureModel.prototype.setCommentsCount = function(number) {
     this.data.comments = number;
+    this.change();
+  };
+
+  PictureModel.prototype.change = function() {
+
   };
 
   return PictureModel;
