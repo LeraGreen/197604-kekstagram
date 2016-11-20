@@ -1,8 +1,10 @@
 'use strict';
 
-define(function() {
+define(['./utils.js', './superclass.js'], function(utils, SuperClass) {
 
   var Picture = function(data) {
+    SuperClass.call(this);
+
     this.data = data;
     this.index = null;
     this.element = this.createNode(this.data);
@@ -11,8 +13,11 @@ define(function() {
     this.element.addEventListener('click', this.setPictureClick);
   };
 
+  utils.inherit(SuperClass, Picture);
+
   Picture.prototype.remove = function() {
     this.element.removeEventListener('click', this.setPictureClick);
+    SuperClass.prototype.remove.call(this, this.element);
   };
 
   Picture.prototype.setPictureClick = function(event) {
