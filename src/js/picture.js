@@ -6,6 +6,7 @@ define(['./utils.js', './superclass.js'], function(utils, SuperClass) {
     SuperClass.call(this);
 
     this.model = model;
+
     this.index = null;
     this.element = this.createNode();
 
@@ -37,6 +38,13 @@ define(['./utils.js', './superclass.js'], function(utils, SuperClass) {
       imgNode.querySelector('img').setAttribute('height', 182);
       imgNode.querySelector('.picture-likes').insertAdjacentHTML('afterBegin', this.model.getLikes());
       imgNode.querySelector('.picture-comments').insertAdjacentHTML('afterBegin', this.model.getComments());
+      window.addEventListener('change', function() {
+        var pictureLikes = imgNode.querySelector('.picture-likes');
+        if (pictureLikes !== null) {
+          pictureLikes.innerHTML = '';
+          pictureLikes.insertAdjacentHTML('afterBegin', this.model.getLikes());
+        }
+      }.bind(this));
     }.bind(this);
 
     img.src = this.model.getUrl();
