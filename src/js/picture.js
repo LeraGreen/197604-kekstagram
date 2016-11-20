@@ -25,6 +25,7 @@ define(function() {
     var templateContainer = 'content' in template ? template.content : template;
     var img = new Image();
     var imgNode = templateContainer.querySelector('.picture').cloneNode(true);
+    console.log(obj);
 
     img.onload = function() {
       imgNode.querySelector('img').setAttribute('src', this.src);

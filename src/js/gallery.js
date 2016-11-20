@@ -14,7 +14,6 @@ define(['./picture.js'], function(Picture) {
 
     this.showNextPicture = this.showNextPicture.bind(this);
     this.overlayImage.addEventListener('click', this.showNextPicture);
-
   };
 
   Gallery.prototype.setPictures = function(arr) {
@@ -26,6 +25,7 @@ define(['./picture.js'], function(Picture) {
 
   Gallery.prototype.render = function(arr) {
     arr.forEach(function(item, i) {
+      var pictureModel = new PictureModel();
       var picture = new Picture(item);
       picture.index = i;
 
