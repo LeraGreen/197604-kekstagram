@@ -1,7 +1,7 @@
 'use strict';
 
-define(['./picture.js', './utils.js', './superclass.js'],
-  function(Picture, utils, SuperClass) {
+define(['./picture.js', './utils.js', './superclass.js', './picture-model.js'],
+  function(Picture, utils, SuperClass, PictureModel) {
 
     var Gallery = function() {
       SuperClass.call(this);
@@ -23,9 +23,13 @@ define(['./picture.js', './utils.js', './superclass.js'],
 
     Gallery.prototype.setPictures = function(arr) {
       arr.forEach(function(item) {
-        this.pictures.push(item);
+        this.pictures.push(new PictureModel(item));
       }, this);
-      this.render(arr);
+      var pictureModelList = arr.map(function(item) {
+        return (new PictureModel(item));
+      });
+
+      this.render(pictureModelList);
     };
 
     Gallery.prototype.render = function(arr) {
@@ -65,14 +69,13 @@ define(['./picture.js', './utils.js', './superclass.js'],
       this.activePicture = number;
       this.pictures.forEach(function(item, i) {
         if (i === number) {
-          var imgSrc = item.preview ? item.preview : item.url;
+          var imgSrc = item.getPictureUrl();
           this.overlayImage.setAttribute('src', imgSrc);
-          document.querySelector('.likes-count').innerHTML = item.likes;
-          document.querySelector('.comments-count').innerHTML = item.comments;
+          document.querySelector('.likes-count').innerHTML = item.getPictureLikes();
+          document.querySelector('.comments-count').innerHTML = item.getPictureComments();
         }
       }, this);
     };
 
     return new Gallery();
-
   });
