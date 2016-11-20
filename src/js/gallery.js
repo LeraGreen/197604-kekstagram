@@ -71,7 +71,6 @@ define(['./picture.js', './utils.js', './superclass.js'],
           document.querySelector('.comments-count').innerHTML = item.comments;
         }
       }, this);
-
     };
 
     return new Gallery();
