@@ -44,6 +44,9 @@ define(function() {
 
   // };
 
+  PictureModel.prototype.change = function() {
+  };
+
   return PictureModel;
 
 });
