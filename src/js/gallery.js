@@ -7,16 +7,21 @@ define(['./picture.js', './utils.js', './superclass.js', './picture-model.js'],
       SuperClass.call(this);
 
       this.activePicture = null;
+      this.pictureNumber = null;
       this.pictures = [];
       this.overlay = document.querySelector('.gallery-overlay');
       this.overlayClose = document.querySelector('.gallery-overlay-close');
       this.overlayImage = document.querySelector('.gallery-overlay-image');
+      this.overlayLikes = document.querySelector('.likes-count');
 
       this.hide = this.hide.bind(this);
       this.overlayClose.addEventListener('click', this.hide);
 
       this.showNextPicture = this.showNextPicture.bind(this);
       this.overlayImage.addEventListener('click', this.showNextPicture);
+
+      this.callChangeLikes = this.callChangeLikes.bind(this);
+      this.overlayLikes.addEventListener('click', this.callChangeLikes);
     };
 
     utils.inherit(SuperClass, Gallery);
@@ -29,11 +34,14 @@ define(['./picture.js', './utils.js', './superclass.js', './picture-model.js'],
       this.render(pictureModelList);
     };
 
+    Gallery.prototype.callChangeLikes = function() {
+      this.changeNumberLikes(this.pictures[this.activePicture]);
+    };
+
     Gallery.prototype.render = function(arr) {
       arr.forEach(function(item, i) {
         var picture = new Picture(item);
-        picture.index = i;
-
+        picture.index = i + this.pictures.length - arr.length;
         picture.onclick = function(index) {
           this.show(index);
           return false;
@@ -62,16 +70,33 @@ define(['./picture.js', './utils.js', './superclass.js', './picture-model.js'],
       this.overlay.classList.add('invisible');
     };
 
+    Gallery.prototype.changeNumberLikes = function(picture) {
+      if (this.overlayLikes.classList.contains('likes-count-liked')) {
+        this.overlayLikes.classList.remove('likes-count-liked');
+        picture.setLikes(picture.getLikes() - 1);
+        picture.liked = false;
+      } else {
+        this.overlayLikes.classList.add('likes-count-liked');
+        picture.setLikes(picture.getLikes() + 1);
+        picture.liked = true;
+      }
+    };
+
     Gallery.prototype.setActivePicture = function(number) {
       this.activePicture = number;
-      this.pictures.forEach(function(picture, i) {
-        if (i === number) {
-          var imgSrc = picture.getUrl();
-          this.overlayImage.setAttribute('src', imgSrc);
-          document.querySelector('.likes-count').innerHTML = picture.getLikes();
-          document.querySelector('.comments-count').innerHTML = picture.getComments();
-        }
-      }, this);
+      var picture = this.pictures[this.activePicture];
+      var imgSrc = picture.getUrl();
+      this.overlayImage.setAttribute('src', imgSrc);
+      document.querySelector('.likes-count').innerHTML = picture.getLikes();
+      document.querySelector('.comments-count').innerHTML = picture.getComments();
+      if (picture.liked === true) {
+        this.overlayLikes.classList.add('likes-count-liked');
+      } else {
+        this.overlayLikes.classList.remove('likes-count-liked');
+      }
+      window.addEventListener('change', function() {
+        document.querySelector('.likes-count').innerHTML = picture.getLikes();
+      });
     };
 
     return new Gallery();

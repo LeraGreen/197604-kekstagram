@@ -4,6 +4,8 @@ define(function() {
 
   var PictureModel = function(data) {
     this.data = data;
+    this.list = [];
+    this.liked = false;
   };
 
   PictureModel.prototype.getUrl = function() {
@@ -22,21 +24,20 @@ define(function() {
     return new Date(this.data.created);
   };
 
-  PictureModel.prototype.setLikesCount = function(number) {
+  PictureModel.prototype.setLikes = function(number) {
     this.data.likes = number;
-    this.change();
+    this.changeLikes();
   };
 
-  PictureModel.prototype.setCommentsCount = function(number) {
+  PictureModel.prototype.setComments = function(number) {
     this.data.comments = number;
-    this.change();
   };
 
-  PictureModel.prototype.change = function() {
-
+  PictureModel.prototype.changeLikes = function() {
+    var changeLikes = new CustomEvent('change');
+    window.dispatchEvent(changeLikes);
   };
 
   return PictureModel;
-
 });
 
