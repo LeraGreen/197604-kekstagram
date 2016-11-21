@@ -7,7 +7,6 @@ define(['./picture.js', './utils.js', './superclass.js', './picture-model.js'],
       SuperClass.call(this);
 
       this.activePicture = null;
-      this.pictureNumber = null;
       this.pictures = [];
       this.overlay = document.querySelector('.gallery-overlay');
       this.overlayClose = document.querySelector('.gallery-overlay-close');
@@ -22,6 +21,8 @@ define(['./picture.js', './utils.js', './superclass.js', './picture-model.js'],
 
       this.callChangeLikes = this.callChangeLikes.bind(this);
       this.overlayLikes.addEventListener('click', this.callChangeLikes);
+
+      this.restoreFromHash = this.restoreFromHash.bind(this);
     };
 
     utils.inherit(SuperClass, Gallery);
@@ -39,35 +40,49 @@ define(['./picture.js', './utils.js', './superclass.js', './picture-model.js'],
     };
 
     Gallery.prototype.render = function(arr) {
-      arr.forEach(function(item, i) {
-        var picture = new Picture(item);
-        picture.index = i + this.pictures.length - arr.length;
-        picture.onclick = function(index) {
-          this.show(index);
-          return false;
+      arr.forEach(function(model, i) {
+        model.index = i + this.pictures.length - arr.length;
+        var picture = new Picture(model);
+        picture.onclick = function() {
+          var url = picture.model.getUrl();
+          location.hash = '#photo/' + url;
         };
 
-        picture.onclick = picture.onclick.bind(this);
+        picture.onclick = picture.onclick;
         SuperClass.prototype.show.call(this, document.querySelector('.pictures'), picture.element);
       }, this);
+      window.addEventListener('hashchange', this.restoreFromHash);
+      this.restoreFromHash();
     };
 
-    Gallery.prototype.show = function(number) {
+    Gallery.prototype.restoreFromHash = function() {
+      var regexp = /#photo\/(\S+)/;
+      if (location.hash.match(regexp)) {
+        this.show(location.hash.match(regexp)[1]);
+      } else {
+        this.hide();
+      }
+    };
+
+    Gallery.prototype.show = function(url) {
       this.overlay.classList.remove('invisible');
-      this.setActivePicture(number);
+      this.setActivePicture(url);
     };
 
     Gallery.prototype.showNextPicture = function(evt) {
       if (evt.target === this.overlayImage) {
         if (this.activePicture === this.pictures.length - 1) {
-          this.setActivePicture(0);
+          var firstPictureUrl = this.pictures[0].getUrl();
+          location.hash = '#photo/' + firstPictureUrl;
         }
-        this.setActivePicture(this.activePicture + 1);
+        var nexPictureUrl = this.pictures[this.activePicture + 1].getUrl();
+        location.hash = '#photo/' + nexPictureUrl;
       }
     };
 
     Gallery.prototype.hide = function() {
       this.overlay.classList.add('invisible');
+      location.hash = '';
     };
 
     Gallery.prototype.changeNumberLikes = function(picture) {
@@ -82,21 +97,26 @@ define(['./picture.js', './utils.js', './superclass.js', './picture-model.js'],
       }
     };
 
-    Gallery.prototype.setActivePicture = function(number) {
-      this.activePicture = number;
-      var picture = this.pictures[this.activePicture];
-      var imgSrc = picture.getUrl();
-      this.overlayImage.setAttribute('src', imgSrc);
-      document.querySelector('.likes-count').innerHTML = picture.getLikes();
-      document.querySelector('.comments-count').innerHTML = picture.getComments();
-      if (picture.liked === true) {
-        this.overlayLikes.classList.add('likes-count-liked');
-      } else {
-        this.overlayLikes.classList.remove('likes-count-liked');
-      }
-      window.addEventListener('change', function() {
-        document.querySelector('.likes-count').innerHTML = picture.getLikes();
-      });
+    Gallery.prototype.setActivePicture = function(url) {
+      this.pictures.forEach(function(item) {
+        if (item.getUrl() === url) {
+          this.activePicture = item.index;
+          var picture = this.pictures[this.activePicture];
+          var imgSrc = url;
+          this.overlayImage.setAttribute('src', imgSrc);
+          document.querySelector('.likes-count').innerHTML = picture.getLikes();
+          document.querySelector('.comments-count').innerHTML = picture.getComments();
+          if (picture.liked === true) {
+            this.overlayLikes.classList.add('likes-count-liked');
+          } else {
+            this.overlayLikes.classList.remove('likes-count-liked');
+          }
+          window.addEventListener('change', function() {
+            document.querySelector('.likes-count').innerHTML = picture.getLikes();
+          });
+        }
+
+      }.bind(this));
     };
 
     return new Gallery();
