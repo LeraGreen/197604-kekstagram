@@ -7,7 +7,6 @@ define(['./utils.js', './superclass.js'], function(utils, SuperClass) {
 
     this.model = model;
 
-    this.index = null;
     this.element = this.createNode();
 
     this.setPictureClick = this.setPictureClick.bind(this);
@@ -23,7 +22,7 @@ define(['./utils.js', './superclass.js'], function(utils, SuperClass) {
 
   Picture.prototype.setPictureClick = function(event) {
     event.preventDefault();
-    this.onclick(this.index);
+    this.onclick();
   };
 
   Picture.prototype.createNode = function() {
