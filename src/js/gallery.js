@@ -22,6 +22,8 @@ define(['./picture.js', './utils.js', './superclass.js', './picture-model.js'],
 
       this.callChangeLikes = this.callChangeLikes.bind(this);
       this.overlayLikes.addEventListener('click', this.callChangeLikes);
+
+      this.restoreFromHash = this.restoreFromHash.bind(this);
     };
 
     utils.inherit(SuperClass, Gallery);
@@ -50,6 +52,10 @@ define(['./picture.js', './utils.js', './superclass.js', './picture-model.js'],
         picture.onclick = picture.onclick.bind(this);
         SuperClass.prototype.show.call(this, document.querySelector('.pictures'), picture.element);
       }, this);
+      if (this.pictures.length === arr.length) {
+        window.addEventListener('hashchange', this.restoreFromHash);
+        this.restoreFromHash();
+      }
     };
 
     Gallery.prototype.show = function(number) {
