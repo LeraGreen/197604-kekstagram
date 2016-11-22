@@ -48,7 +48,6 @@ define(['./picture.js', './utils.js', './superclass.js', './picture-model.js'],
           this.show(index);
           return false;
         };
-
         picture.onclick = picture.onclick.bind(this);
         SuperClass.prototype.show.call(this, document.querySelector('.pictures'), picture.element);
       }, this);
