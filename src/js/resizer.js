@@ -168,42 +168,62 @@ define(function() {
 
         this._ctx.translate(Math.round(this._container.width / 2), Math.round(this._container.height / 2));
 
-        var circleRadius = 5;
-        var circleOffset = 10;
-        this._ctx.fillStyle = '#ffe753';
-        var circleXFirtst = Math.floor((-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2);
-        var circleYFirtst = Math.floor((-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2);
-        var circleLineX = circleXFirtst;
-        var circleLineY = circleYFirtst;
-        var circleLineLengthHor = Math.floor((this._resizeConstraint.side - this._ctx.lineWidth / 2) + circleLineX);
-        var circleLineLengthVer = Math.floor((this._resizeConstraint.side - this._ctx.lineWidth / 2) + circleLineY);
+        var lineLength = 12;
+        var zigzagXFirst = Math.floor((-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2);
+        var zigzagYFirst = Math.floor((-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2);
+        var zigzagLineX = zigzagXFirst;
+        var zigzagLineY = zigzagYFirst;
+        var zigzagLineLengthHor = Math.floor((this._resizeConstraint.side - this._ctx.lineWidth / 2) + zigzagXFirst);
+        var zigzagLineLengthVer = Math.floor((this._resizeConstraint.side - this._ctx.lineWidth / 2) + zigzagYFirst);
 
-        while (circleLineX <= circleLineLengthHor - circleRadius / 2) {
+        this._ctx.lineCap = 'square';
+
+        while (zigzagLineX <= zigzagLineLengthHor - lineLength / 2) {
           this._ctx.beginPath();
-          this._ctx.arc(circleLineX, circleLineY, circleRadius, 0, 2 * Math.PI);
-          this._ctx.fill();
-          circleLineX = circleLineX + circleRadius + circleOffset;
+          this._ctx.moveTo(zigzagLineX, zigzagLineY);
+          zigzagLineX = zigzagLineX + lineLength;
+          zigzagLineY = zigzagLineY - lineLength;
+          this._ctx.lineTo(zigzagLineX, zigzagLineY);
+          zigzagLineX = zigzagLineX + lineLength;
+          zigzagLineY = zigzagLineY + lineLength;
+          this._ctx.lineTo(zigzagLineX, zigzagLineY);
+          this._ctx.stroke();
         }
 
-        while (circleLineY <= circleLineLengthVer - circleRadius / 2) {
+        while (zigzagLineY <= zigzagLineLengthVer - lineLength / 2) {
           this._ctx.beginPath();
-          this._ctx.arc(circleLineX, circleLineY, circleRadius, 0, 2 * Math.PI);
-          this._ctx.fill();
-          circleLineY = circleLineY + circleRadius + circleOffset;
+          this._ctx.moveTo(zigzagLineX, zigzagLineY);
+          zigzagLineX = zigzagLineX - lineLength;
+          zigzagLineY = zigzagLineY + lineLength;
+          this._ctx.lineTo(zigzagLineX, zigzagLineY);
+          zigzagLineX = zigzagLineX + lineLength;
+          zigzagLineY = zigzagLineY + lineLength;
+          this._ctx.lineTo(zigzagLineX, zigzagLineY);
+          this._ctx.stroke();
         }
 
-        while (circleLineX >= circleXFirtst + circleRadius / 2) {
+        while (zigzagLineX >= zigzagXFirst + lineLength / 2) {
           this._ctx.beginPath();
-          this._ctx.arc(circleLineX, circleLineY, circleRadius, 0, 2 * Math.PI);
-          this._ctx.fill();
-          circleLineX = circleLineX - circleRadius - circleOffset;
+          this._ctx.moveTo(zigzagLineX, zigzagLineY);
+          zigzagLineX = zigzagLineX - lineLength;
+          zigzagLineY = zigzagLineY + lineLength;
+          this._ctx.lineTo(zigzagLineX, zigzagLineY);
+          zigzagLineX = zigzagLineX - lineLength;
+          zigzagLineY = zigzagLineY - lineLength;
+          this._ctx.lineTo(zigzagLineX, zigzagLineY);
+          this._ctx.stroke();
         }
 
-        while (circleLineY >= circleYFirtst + circleRadius / 2) {
+        while (zigzagLineY >= zigzagYFirst + lineLength / 2) {
           this._ctx.beginPath();
-          this._ctx.arc(circleLineX, circleLineY, circleRadius, 0, 2 * Math.PI);
-          this._ctx.fill();
-          circleLineY = circleLineY - circleRadius - circleOffset;
+          this._ctx.moveTo(zigzagLineX, zigzagLineY);
+          zigzagLineX = zigzagLineX + lineLength;
+          zigzagLineY = zigzagLineY - lineLength;
+          this._ctx.lineTo(zigzagLineX, zigzagLineY);
+          zigzagLineX = zigzagLineX - lineLength;
+          zigzagLineY = zigzagLineY - lineLength;
+          this._ctx.lineTo(zigzagLineX, zigzagLineY);
+          this._ctx.stroke();
         }
 
         // Восстановление состояния канваса, которое было до вызова ctx.save
