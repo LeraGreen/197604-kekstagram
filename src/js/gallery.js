@@ -51,8 +51,10 @@ define(['./picture.js', './utils.js', './superclass.js', './picture-model.js'],
         picture.onclick = picture.onclick;
         SuperClass.prototype.show.call(this, document.querySelector('.pictures'), picture.element);
       }, this);
-      window.addEventListener('hashchange', this.restoreFromHash);
-      this.restoreFromHash();
+      if (this.pictures.length === arr.length) {
+        window.addEventListener('hashchange', this.restoreFromHash);
+        this.restoreFromHash();
+      }
     };
 
     Gallery.prototype.restoreFromHash = function() {
