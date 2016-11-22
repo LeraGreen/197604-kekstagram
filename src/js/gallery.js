@@ -47,7 +47,6 @@ define(['./picture.js', './utils.js', './superclass.js', './picture-model.js'],
           var url = picture.model.getUrl();
           location.hash = '#photo/' + url;
         };
-
         picture.onclick = picture.onclick;
         SuperClass.prototype.show.call(this, document.querySelector('.pictures'), picture.element);
       }, this);

@@ -93,11 +93,6 @@ define(function() {
         this._ctx.lineWidth = 6;
         // Цвет обводки.
         this._ctx.strokeStyle = '#ffe753';
-        // Размер штрихов. Первый элемент массива задает длину штриха, второй
-        // расстояние между соседними штрихами.
-        this._ctx.setLineDash([15, 10]);
-        //Смещение первого штриха от начала линии.
-        this._ctx.lineDashOffset = 7;
 
         // Сохранение состояния канваса.
         this._ctx.save();
@@ -112,14 +107,9 @@ define(function() {
         // Координаты задаются от центра холста.
         this._ctx.drawImage(this._image, displX, displY);
 
-
         // Отрисовка прямоугольника, обозначающего область изображения после
         // кадрирования. Координаты задаются от центра.
-        this._ctx.strokeRect(
-            (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
-            (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
-            this._resizeConstraint.side - this._ctx.lineWidth / 2,
-            this._resizeConstraint.side - this._ctx.lineWidth / 2);
+        // this._ctx.strokeRect(
 
         var size = Math.round(this._resizeConstraint.side - this._ctx.lineWidth / 2);
 
@@ -175,6 +165,46 @@ define(function() {
         this._ctx.textBaseline = 'bottom';
         this._ctx.fillText(this._image.naturalWidth + ' x ' + this._image.naturalHeight,
           this._container.width / 2, blocks[0].height);
+
+        this._ctx.translate(Math.round(this._container.width / 2), Math.round(this._container.height / 2));
+
+        var circleRadius = 5;
+        var circleOffset = 10;
+        this._ctx.fillStyle = '#ffe753';
+        var circleXFirtst = Math.floor((-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2);
+        var circleYFirtst = Math.floor((-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2);
+        var circleLineX = circleXFirtst;
+        var circleLineY = circleYFirtst;
+        var circleLineLengthHor = Math.floor((this._resizeConstraint.side - this._ctx.lineWidth / 2) + circleLineX);
+        var circleLineLengthVer = Math.floor((this._resizeConstraint.side - this._ctx.lineWidth / 2) + circleLineY);
+
+        while (circleLineX <= circleLineLengthHor - circleRadius / 2) {
+          this._ctx.beginPath();
+          this._ctx.arc(circleLineX, circleLineY, circleRadius, 0, 2 * Math.PI);
+          this._ctx.fill();
+          circleLineX = circleLineX + circleRadius + circleOffset;
+        }
+
+        while (circleLineY <= circleLineLengthVer - circleRadius / 2) {
+          this._ctx.beginPath();
+          this._ctx.arc(circleLineX, circleLineY, circleRadius, 0, 2 * Math.PI);
+          this._ctx.fill();
+          circleLineY = circleLineY + circleRadius + circleOffset;
+        }
+
+        while (circleLineX >= circleXFirtst + circleRadius / 2) {
+          this._ctx.beginPath();
+          this._ctx.arc(circleLineX, circleLineY, circleRadius, 0, 2 * Math.PI);
+          this._ctx.fill();
+          circleLineX = circleLineX - circleRadius - circleOffset;
+        }
+
+        while (circleLineY >= circleYFirtst + circleRadius / 2) {
+          this._ctx.beginPath();
+          this._ctx.arc(circleLineX, circleLineY, circleRadius, 0, 2 * Math.PI);
+          this._ctx.fill();
+          circleLineY = circleLineY - circleRadius - circleOffset;
+        }
 
         // Восстановление состояния канваса, которое было до вызова ctx.save
         // и последующего изменения системы координат. Нужно для того, чтобы
