@@ -1,6 +1,6 @@
 'use strict';
 
-
+const GhPagesWebpackPlugin = require('gh-pages-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const fs = require('fs');
 const path = require('path');
@@ -32,6 +32,16 @@ module.exports = {
       { from: `${SRC_DIRNAME}`, to: `${OUTPUT_DIRNAME}` }
     ], {
       ignore: [`${SRC_DIRNAME}/js`]
+    }),
+    new GhPagesWebpackPlugin({
+        path: './build',
+        options: {
+            message: 'Update Home Page',
+            user: {
+                name: 'LeraGreen',
+                email: 'lera@green.su'
+            }
+        }
     })
   ]
 };

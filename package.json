@@ -28,6 +28,7 @@
     "webpack-dev-middleware": "1.6.1"
   },
   "dependencies": {
+    "gh-pages-webpack-plugin": "^1.0.1",
     "webpack": "^1.13.2"
   },
   "scripts": {
