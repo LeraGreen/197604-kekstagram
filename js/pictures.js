@@ -88,7 +88,7 @@ define(['./load.js', './gallery.js'],
     function loadPhotos(filter, currentPage) {
       var from = currentPage * pageSize;
       var to = (currentPage * pageSize) + pageSize;
-      load('data/data.json', {
+      load('/api/pictures', {
         from: from,
         to: to,
         filter: filter
