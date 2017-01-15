@@ -29,7 +29,8 @@ module.exports = {
 
   plugins: [
     new CopyWebpackPlugin([
-      { from: `${SRC_DIRNAME}`, to: `${OUTPUT_DIRNAME}` }
+      { from: `${SRC_DIRNAME}`, to: `${OUTPUT_DIRNAME}` },
+      { from: path.resolve(projectRoot, 'bin/data/data.json'), to: path.resolve(projectRoot, 'build/data/data.json')}
     ], {
       ignore: [`${SRC_DIRNAME}/js`]
     }),
